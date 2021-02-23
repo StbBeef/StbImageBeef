@@ -28,11 +28,11 @@ namespace StbImageSharp
 		public const int STBI__F_avg_first = 5;
 		public const int STBI__F_paeth_first = 6;
 
-		public static uint8[] png_sig = new uint8[] { 137, 80, 78, 71, 13, 10, 26, 10 };
+		public static uint8[?] png_sig = .(137, 80, 78, 71, 13, 10, 26, 10);
 
-		public static uint8[] first_row_filter = new uint8[] {STBI__F_none, STBI__F_sub, STBI__F_none, STBI__F_avg_first, STBI__F_paeth_first};
+		public static uint8[?] first_row_filter = .(STBI__F_none, STBI__F_sub, STBI__F_none, STBI__F_avg_first, STBI__F_paeth_first);
 
-		public static uint8[] stbi__depth_scale_table = new uint8[] { 0, 0xff, 0x55, 0, 0x11, 0, 0, 0, 0x01 };
+		public static uint8[?] stbi__depth_scale_table = .(0, 0xff, 0x55, 0, 0x11, 0, 0, 0, 0x01);
 
 		public static stbi__pngchunk stbi__get_chunk_header(stbi__context s)
 		{

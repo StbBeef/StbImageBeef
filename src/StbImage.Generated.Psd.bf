@@ -13,6 +13,7 @@ namespace StbImageSharp
 
 		public static int stbi__psd_decode_rle(stbi__context s, uint8* p, int pixelCount)
 		{
+			uint8 *pLocal = p;
 			var count = 0;
 			var nleft = 0;
 			var len = 0;
@@ -31,8 +32,8 @@ namespace StbImageSharp
 					count += len;
 					while (len != 0)
 					{
-						*p = stbi__get8(s);
-						p += 4;
+						*pLocal = stbi__get8(s);
+						pLocal += 4;
 						len--;
 					}
 				}
@@ -46,8 +47,8 @@ namespace StbImageSharp
 					count += len;
 					while (len != 0)
 					{
-						*p = val;
-						p += 4;
+						*pLocal = val;
+						pLocal += 4;
 						len--;
 					}
 				}
@@ -98,7 +99,7 @@ namespace StbImageSharp
 			}
 			else
 			{
-				_out_ = (uint8*)stbi__malloc((uint64)(4 * w * h));
+				_out_ = (uint8*)stbi__malloc(4 * w * h);
 			}
 
 			if (_out_ == null)
@@ -202,9 +203,9 @@ namespace StbImageSharp
 			if (req_comp != 0 && req_comp != 4)
 			{
 				if (ri.bits_per_channel == 16)
-					_out_ = (uint8*)stbi__convert_format16((uint16*)_out_, 4, req_comp, (uint)w, (uint)h);
+					_out_ = (uint8*)stbi__convert_format16((uint16*)_out_, 4, req_comp, w, h);
 				else
-					_out_ = stbi__convert_format(_out_, 4, req_comp, (uint)w, (uint)h);
+					_out_ = stbi__convert_format(_out_, 4, req_comp, w, h);
 				if (_out_ == null)
 					return _out_;
 			}
@@ -218,15 +219,18 @@ namespace StbImageSharp
 
 		public static int stbi__psd_info(stbi__context s, int* x, int* y, int* comp)
 		{
+			int *xLocal = x;
+			int *yLocal = y;
+			int *compLocal = comp;
 			var channelCount = 0;
 			var dummy = 0;
 			var depth = 0;
-			if (x == null)
-				x = &dummy;
-			if (y == null)
-				y = &dummy;
-			if (comp == null)
-				comp = &dummy;
+			if (xLocal == null)
+				xLocal = &dummy;
+			if (yLocal == null)
+				yLocal = &dummy;
+			if (compLocal == null)
+				compLocal = &dummy;
 			if (stbi__get32be(s) != 0x38425053)
 			{
 				stbi__rewind(s);
@@ -247,8 +251,8 @@ namespace StbImageSharp
 				return 0;
 			}
 
-			*y = (int)stbi__get32be(s);
-			*x = (int)stbi__get32be(s);
+			*yLocal = (int)stbi__get32be(s);
+			*xLocal = (int)stbi__get32be(s);
 			depth = stbi__get16be(s);
 			if (depth != 8 && depth != 16)
 			{
@@ -262,7 +266,7 @@ namespace StbImageSharp
 				return 0;
 			}
 
-			*comp = 4;
+			*compLocal = 4;
 			return 1;
 		}
 

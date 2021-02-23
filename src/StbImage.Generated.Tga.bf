@@ -10,21 +10,21 @@ namespace StbImageSharp
 				*is_rgb16 = 0;
 			switch (bits_per_pixel)
 			{
-				case 8:
-					return STBI_grey;
-				case 15:
-				case 16:
-					if (bits_per_pixel == 16 && is_grey != 0)
-						return STBI_grey_alpha;
-					if (is_rgb16 != null)
-						*is_rgb16 = 1;
-					return STBI_rgb;
-				case 24:
-				case 32:
-					return bits_per_pixel / 8;
-				default:
-					return 0;
+			case 8:
+				return STBI_grey;
+			case 15:
+			case 16:
+				if (bits_per_pixel == 16 && is_grey != 0)
+					return STBI_grey_alpha;
+				if (is_rgb16 != null)
+					*is_rgb16 = 1;
+				return STBI_rgb;
+			case 24:
+			case 32:
+				return bits_per_pixel / 8;
 			}
+
+			return 0;
 		}
 
 		public static int stbi__tga_info(stbi__context s, int* x, int* y, int* comp)
@@ -131,38 +131,41 @@ namespace StbImageSharp
 			var tga_color_type = 0;
 			stbi__get8(s);
 			tga_color_type = stbi__get8(s);
-			if (tga_color_type > 1)
-				goto errorEnd;
-			sz = stbi__get8(s);
-			if (tga_color_type == 1)
+			repeat
 			{
-				if (sz != 1 && sz != 9)
-					goto errorEnd;
-				stbi__skip(s, 4);
+				if (tga_color_type > 1)
+					break;
 				sz = stbi__get8(s);
-				if (sz != 8 && sz != 15 && sz != 16 && sz != 24 && sz != 32)
-					goto errorEnd;
-				stbi__skip(s, 4);
-			}
-			else
-			{
-				if (sz != 2 && sz != 3 && sz != 10 && sz != 11)
-					goto errorEnd;
-				stbi__skip(s, 9);
-			}
+				if (tga_color_type == 1)
+				{
+					if (sz != 1 && sz != 9)
+						break;
+					stbi__skip(s, 4);
+					sz = stbi__get8(s);
+					if (sz != 8 && sz != 15 && sz != 16 && sz != 24 && sz != 32)
+						break;
+					stbi__skip(s, 4);
+				}
+				else
+				{
+					if (sz != 2 && sz != 3 && sz != 10 && sz != 11)
+						break;
+					stbi__skip(s, 9);
+				}
 
-			if (stbi__get16le(s) < 1)
-				goto errorEnd;
-			if (stbi__get16le(s) < 1)
-				goto errorEnd;
-			sz = stbi__get8(s);
-			if (tga_color_type == 1 && sz != 8 && sz != 16)
-				goto errorEnd;
-			if (sz != 8 && sz != 15 && sz != 16 && sz != 24 && sz != 32)
-				goto errorEnd;
-			res = 1;
-			errorEnd:
-			;
+				if (stbi__get16le(s) < 1)
+					break;
+				if (stbi__get16le(s) < 1)
+					break;
+				sz = stbi__get8(s);
+				if (tga_color_type == 1 && sz != 8 && sz != 16)
+					break;
+				if (sz != 8 && sz != 15 && sz != 16 && sz != 24 && sz != 32)
+					break;
+				res = 1;
+				break;
+			}
+			while (true);
 			stbi__rewind(s);
 			return res;
 		}
@@ -293,7 +296,7 @@ namespace StbImageSharp
 					{
 						if (tga_indexed != 0)
 						{
-							var pal_idx = tga_bits_per_pixel == 8 ? stbi__get8(s) : stbi__get16le(s);
+							int pal_idx = tga_bits_per_pixel == 8 ? stbi__get8(s) : stbi__get16le(s);
 							if (pal_idx >= tga_palette_len)
 								pal_idx = 0;
 							pal_idx *= tga_comp;
@@ -302,7 +305,7 @@ namespace StbImageSharp
 						}
 						else if (tga_rgb16 != 0)
 						{
-							stbi__tga_read_rgb16(s, raw_data);
+							stbi__tga_read_rgb16(s, raw_data.CArray());
 						}
 						else
 						{
@@ -350,7 +353,7 @@ namespace StbImageSharp
 			}
 
 			if (req_comp != 0 && req_comp != tga_comp)
-				tga_data = stbi__convert_format(tga_data, tga_comp, req_comp, (uint)tga_width, (uint)tga_height);
+				tga_data = stbi__convert_format(tga_data, tga_comp, req_comp, tga_width, tga_height);
 			tga_palette_start = tga_palette_len = tga_palette_bits = tga_x_origin = tga_y_origin = 0;
 			return tga_data;
 		}

@@ -611,7 +611,7 @@ namespace StbImageSharp
 						for (i = 0; i < w; ++i)
 						{
 							var ha = z.img_comp[n].ha;
-							if (stbi__jpeg_decode_block(z, data.CArray(), z.huff_dc[z.img_comp[n].hd], z.huff_ac[ha], z.fast_ac[ha],
+							if (stbi__jpeg_decode_block(z, data.CArray(), &z.huff_dc[z.img_comp[n].hd], &z.huff_ac[ha], z.fast_ac[ha],
 									n, z.dequant[z.img_comp[n].tq]) == 0)
 								return 0;
 							z.idct_block_kernel(z.img_comp[n].data + z.img_comp[n].w2 * j * 8 + i * 8, z.img_comp[n].w2,
@@ -648,7 +648,7 @@ namespace StbImageSharp
 										var x2 = (i * z.img_comp[n].h + x) * 8;
 										var y2 = (j * z.img_comp[n].v + y) * 8;
 										var ha = z.img_comp[n].ha;
-										if (stbi__jpeg_decode_block(z, data.CArray(), z.huff_dc[z.img_comp[n].hd], z.huff_ac[ha],
+										if (stbi__jpeg_decode_block(z, data.CArray(), &z.huff_dc[z.img_comp[n].hd], &z.huff_ac[ha],
 												z.fast_ac[ha], n, z.dequant[z.img_comp[n].tq]) == 0)
 											return 0;
 										z.idct_block_kernel(z.img_comp[n].data + z.img_comp[n].w2 * y2 + x2, z.img_comp[n].w2,
@@ -683,13 +683,13 @@ namespace StbImageSharp
 						var data = z.img_comp[n].coeff + 64 * (i + j * z.img_comp[n].coeff_w);
 						if (z.spec_start == 0)
 						{
-							if (stbi__jpeg_decode_block_prog_dc(z, data, z.huff_dc[z.img_comp[n].hd], n) == 0)
+							if (stbi__jpeg_decode_block_prog_dc(z, data, &z.huff_dc[z.img_comp[n].hd], n) == 0)
 								return 0;
 						}
 						else
 						{
 							var ha = z.img_comp[n].ha;
-							if (stbi__jpeg_decode_block_prog_ac(z, data, z.huff_ac[ha], z.fast_ac[ha]) == 0)
+							if (stbi__jpeg_decode_block_prog_ac(z, data, &z.huff_ac[ha], z.fast_ac[ha]) == 0)
 								return 0;
 						}
 
@@ -724,7 +724,7 @@ namespace StbImageSharp
 									var x2 = i * z.img_comp[n].h + x;
 									var y2 = j * z.img_comp[n].v + y;
 									var data = z.img_comp[n].coeff + 64 * (x2 + y2 * z.img_comp[n].coeff_w);
-									if (stbi__jpeg_decode_block_prog_dc(z, data, z.huff_dc[z.img_comp[n].hd], n) == 0)
+									if (stbi__jpeg_decode_block_prog_dc(z, data, &z.huff_dc[z.img_comp[n].hd], n) == 0)
 										return 0;
 								}
 						}
@@ -827,13 +827,13 @@ namespace StbImageSharp
 						L -= 17;
 						if (tc == 0)
 						{
-							if (stbi__build_huffman(z.huff_dc[th], sizes.CArray()) == 0)
+							if (stbi__build_huffman(&z.huff_dc[th], sizes.CArray()) == 0)
 								return 0;
 							v = z.huff_dc[th].values;
 						}
 						else
 						{
-							if (stbi__build_huffman(z.huff_ac[th], sizes.CArray()) == 0)
+							if (stbi__build_huffman(&z.huff_ac[th], sizes.CArray()) == 0)
 								return 0;
 							v = z.huff_ac[th].values;
 						}
@@ -841,7 +841,7 @@ namespace StbImageSharp
 						for (i = 0; i < n; ++i)
 							v[i] = stbi__get8(z.s);
 						if (tc != 0)
-							stbi__build_fast_ac(z.fast_ac[th], z.huff_ac[th]);
+							stbi__build_fast_ac(z.fast_ac[th], &z.huff_ac[th]);
 						L -= n;
 					}
 
@@ -1303,9 +1303,9 @@ namespace StbImageSharp
 
 		public static void stbi__setup_jpeg(stbi__jpeg j)
 		{
-			j.idct_block_kernel = stbi__idct_block;
-			j.YCbCr_to_RGB_kernel = stbi__YCbCr_to_RGB_row;
-			j.resample_row_hv_2_kernel = stbi__resample_row_hv_2;
+			j.idct_block_kernel = => stbi__idct_block;
+			j.YCbCr_to_RGB_kernel = => stbi__YCbCr_to_RGB_row;
+			j.resample_row_hv_2_kernel = => stbi__resample_row_hv_2;
 		}
 
 		public static void stbi__cleanup_jpeg(stbi__jpeg j)
@@ -1363,15 +1363,15 @@ namespace StbImageSharp
 					r.ypos = 0;
 					r.line0 = r.line1 = z.img_comp[k].data;
 					if (r.hs == 1 && r.vs == 1)
-						r.resample = resample_row_1;
+						r.resample = => resample_row_1;
 					else if (r.hs == 1 && r.vs == 2)
-						r.resample = stbi__resample_row_v_2;
+						r.resample = => stbi__resample_row_v_2;
 					else if (r.hs == 2 && r.vs == 1)
-						r.resample = stbi__resample_row_h_2;
+						r.resample = => stbi__resample_row_h_2;
 					else if (r.hs == 2 && r.vs == 2)
 						r.resample = z.resample_row_hv_2_kernel;
 					else
-						r.resample = stbi__resample_row_generic;
+						r.resample = => stbi__resample_row_generic;
 				}
 
 				output = (uint8*)stbi__malloc_mad3(n, (int)z.s.img_x, (int)z.s.img_y, 1);

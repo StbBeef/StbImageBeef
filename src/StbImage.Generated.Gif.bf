@@ -217,13 +217,13 @@ namespace StbImageSharp
 				if (stbi__mad3sizes_valid(4, g.w, g.h, 0) == 0)
 					return (uint8*)(stbi__err("too large") != 0 ? (uint8*)null : null);
 				pcount = g.w * g.h;
-				g._out_ = (uint8*)stbi__malloc((uint64)(4 * pcount));
-				g.background = (uint8*)stbi__malloc((uint64)(4 * pcount));
+				g._out_ = (uint8*)stbi__malloc(4 * pcount);
+				g.background = (uint8*)stbi__malloc(4 * pcount);
 				g.history = (uint8*)stbi__malloc((uint64)pcount);
 				if (g._out_ == null || g.background == null || g.history == null)
 					return (uint8*)(stbi__err("outofmem") != 0 ? (uint8*)null : null);
-				CRuntime.memset(g._out_, 0x00, (uint64)(4 * pcount));
-				CRuntime.memset(g.background, 0x00, (uint64)(4 * pcount));
+				CRuntime.memset(g._out_, 0x00, 4 * pcount);
+				CRuntime.memset(g.background, 0x00, 4 * pcount);
 				CRuntime.memset(g.history, 0x00, (uint64)pcount);
 				first_frame = 1;
 			}

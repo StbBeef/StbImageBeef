@@ -14,12 +14,6 @@ namespace StbImageSharp
 
 		public const int STBI__ZFAST_BITS = 9;
 
-		public delegate void idct_block_kernel(uint8* output, int out_stride, int16* data);
-
-		public delegate void YCbCr_to_RGB_kernel(
-			uint8* output, uint8* y, uint8* pcb, uint8* pcr, int count, int step);
-
-		public delegate uint8* Resampler(uint8* a, uint8* b, uint8* c, int d, int e);
 
 		public static String stbi__g_failure_reason;
 		public static int stbi__vertically_flip_on_load;
@@ -73,7 +67,7 @@ namespace StbImageSharp
 			public int eob_run;
 
 			// kernels
-			public idct_block_kernel idct_block_kernel;
+			public function void (uint8* output, int out_stride, int16* data) idct_block_kernel;
 
 			// definition of jpeg image component
 			public img_comp[] img_comp = new img_comp[4];
@@ -88,7 +82,7 @@ namespace StbImageSharp
 			public int[] order = new int[4];
 
 			public int progressive;
-			public Resampler resample_row_hv_2_kernel;
+			public function uint8* (uint8* a, uint8* b, uint8* c, int d, int e) resample_row_hv_2_kernel;
 			public int restart_interval, todo;
 			public int rgb;
 			public stbi__context s;
@@ -98,16 +92,12 @@ namespace StbImageSharp
 			public int spec_start;
 			public int succ_high;
 			public int succ_low;
-			public YCbCr_to_RGB_kernel YCbCr_to_RGB_kernel;
+
+			
+			public function void (uint8* output, uint8* y, uint8* pcb, uint8* pcr, int count, int step) YCbCr_to_RGB_kernel;
 
 			public this()
 			{
-				for (var i = 0; i < 4; ++i)
-				{
-					huff_ac[i] = new stbi__huffman();
-					huff_dc[i] = new stbi__huffman();
-				}
-
 				fast_ac = new int16[4][];
 				for (var i = 0; i < fast_ac.Count; ++i)
 					fast_ac[i] = new int16[1 << STBI__ZFAST_BITS];
@@ -123,7 +113,8 @@ namespace StbImageSharp
 			public int hs;
 			public uint8* line0;
 			public uint8* line1;
-			public Resampler resample;
+
+			public function uint8* (uint8* a, uint8* b, uint8* c, int d, int e) resample;
 			public int vs;
 			public int w_lores;
 			public int ypos;

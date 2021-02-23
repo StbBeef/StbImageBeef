@@ -1,5 +1,6 @@
 FileVersion = 1
+Dependencies = {"StbImageBeef" = "*"}
 
 [Project]
-Name = "StbImageBeef"
+Name = "StbImageBeef.Testing"
 StartupObject = "StbImageBeef.Program"

@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace StbImageSharp
+namespace StbImageBeef
 {
 #if !STBSHARP_INTERNAL
 	public

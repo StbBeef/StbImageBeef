@@ -1,6 +1,6 @@
 using System;
 
-namespace StbImageSharp
+namespace StbImageBeef
 {
 	static class CRuntime
 	{
@@ -53,7 +53,7 @@ namespace StbImageSharp
 			if (a == null)
 				return;
 
-			Internal.Free(a);
+			Internal.StdFree(a);
 
 			MemoryStats.Freed();
 		}

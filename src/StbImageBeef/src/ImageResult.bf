@@ -1,8 +1,8 @@
 using System;
 using System.IO;
-using static StbImageSharp.StbImage;
+using static StbImageBeef.StbImage;
 
-namespace StbImageSharp
+namespace StbImageBeef
 {
 #if !STBSHARP_INTERNAL
 	public

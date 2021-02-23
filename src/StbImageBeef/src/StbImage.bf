@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace StbImageSharp
+namespace StbImageBeef
 {
 #if !STBSHARP_INTERNAL
 	public
@@ -58,8 +58,8 @@ namespace StbImageSharp
 			public readonly uint16[][] dequant;
 
 			public readonly int16[][] fast_ac;
-			public readonly stbi__huffman[] huff_ac = new stbi__huffman[4];
-			public readonly stbi__huffman[] huff_dc = new stbi__huffman[4];
+			public readonly stbi__huffman[4] huff_ac;
+			public readonly stbi__huffman[4] huff_dc;
 			public int app14_color_transform; // Adobe APP14 tag
 			public int code_bits; // number of valid bits
 

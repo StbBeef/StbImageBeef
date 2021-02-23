@@ -11,11 +11,11 @@ namespace StbImageBeef
 #endif
 	class ImageResult
 	{
-		public int Width
+		public int32 Width
 		{
 			get; set;
 		}
-		public int Height
+		public int32 Height
 		{
 			get; set;
 		}
@@ -32,7 +32,7 @@ namespace StbImageBeef
 			get; set;
 		}
 
-		internal static ImageResult FromResult(uint8* result, int width, int height, ColorComponents comp, ColorComponents req_comp)
+		internal static ImageResult FromResult(uint8* result, int32 width, int32 height, ColorComponents comp, ColorComponents req_comp)
 		{
 			if (result == null)
 				return null;
@@ -52,11 +52,11 @@ namespace StbImageBeef
 		{
 			uint8* result = null;
 
-			int x = 0, y = 0, comp = 0;
+			int32 x = 0, y = 0, comp = 0;
 
 			var context = new stbi__context(stream);
 
-			result = stbi__load_and_postprocess_8bit(context, &x, &y, &comp, (int)requiredComponents);
+			result = stbi__load_and_postprocess_8bit(context, &x, &y, &comp, ((int32)requiredComponents));
 
 			return FromResult(result, x, y, (ColorComponents)comp, requiredComponents);
 		}

@@ -9,9 +9,9 @@ namespace StbImageBeef
 #endif
 	static class MemoryStats
 	{
-		private static int _allocations;
+		private static int32 _allocations;
 
-		public static int Allocations => _allocations;
+		public static int32 Allocations => _allocations;
 
 		public static void Allocated()
 		{

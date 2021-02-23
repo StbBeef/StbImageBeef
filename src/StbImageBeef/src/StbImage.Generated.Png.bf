@@ -6,27 +6,27 @@ namespace StbImageBeef
 	{
 		public struct stbi__pngchunk
 		{
-			public int length;
-			public uint type;
+			public int32 length;
+			public uint32 type;
 		}
 
 		public class stbi__png
 		{
 			public uint8* _out_ = null;
-			public int depth;
+			public int32 depth;
 			public uint8* expanded = null;
 			public uint8* idata = null;
 			public stbi__context s;
 		}
 
 
-		public const int STBI__F_none = 0;
-		public const int STBI__F_sub = 1;
-		public const int STBI__F_up = 2;
-		public const int STBI__F_avg = 3;
-		public const int STBI__F_paeth = 4;
-		public const int STBI__F_avg_first = 5;
-		public const int STBI__F_paeth_first = 6;
+		public const int32 STBI__F_none = 0;
+		public const int32 STBI__F_sub = 1;
+		public const int32 STBI__F_up = 2;
+		public const int32 STBI__F_avg = 3;
+		public const int32 STBI__F_paeth = 4;
+		public const int32 STBI__F_avg_first = 5;
+		public const int32 STBI__F_paeth_first = 6;
 
 		public static uint8[?] png_sig = .(137, 80, 78, 71, 13, 10, 26, 10);
 
@@ -37,56 +37,56 @@ namespace StbImageBeef
 		public static stbi__pngchunk stbi__get_chunk_header(stbi__context s)
 		{
 			stbi__pngchunk c = default;
-			c.length = (int)stbi__get32be(s);
+			c.length = (int32)stbi__get32be(s);
 			c.type = stbi__get32be(s);
 			return c;
 		}
 
-		public static int stbi__check_png_header(stbi__context s)
+		public static int32 stbi__check_png_header(stbi__context s)
 		{
-			var i = 0;
+			int32 i = 0;
 			for (i = 0; i < 8; ++i)
 				if (stbi__get8(s) != png_sig[i])
 					return stbi__err("bad png sig");
 			return 1;
 		}
 
-		public static int stbi__create_png_image_raw(stbi__png a, uint8* raw, int raw_len, int out_n, int x, int y, int depth, int color)
+		public static int32 stbi__create_png_image_raw(stbi__png a, uint8* raw, int32 raw_len, int32 out_n, int32 x, int32 y, int32 depth, int32 color)
 		{
 			uint8* rawLocal = raw;
 			var uint8s = depth == 16 ? 2 : 1;
 			var s = a.s;
-			int i = 0;
-			int j = 0;
+			int32 i = 0;
+			int32 j = 0;
 			var stride = x * out_n * uint8s;
-			int img_len = 0;
-			int img_width_uint8s = 0;
-			var k = 0;
+			int32 img_len = 0;
+			int32 img_width_uint8s = 0;
+			int32 k = 0;
 			var img_n = s.img_n;
 			var output_uint8s = out_n * uint8s;
 			var filter_uint8s = img_n * uint8s;
-			var width = (int)x;
-			a._out_ = (uint8*)stbi__malloc_mad3((int)x, (int)y, output_uint8s, 0);
+			var width = (int32)x;
+			a._out_ = (uint8*)stbi__malloc_mad3((int32)x, (int32)y, output_uint8s, 0);
 			if (a._out_ == null)
 				return stbi__err("outofmem");
-			if (stbi__mad3sizes_valid(img_n, (int)x, depth, 7) == 0)
+			if (stbi__mad3sizes_valid(img_n, (int32)x, depth, 7) == 0)
 				return stbi__err("too large");
 			img_width_uint8s = (img_n * x * depth + 7) >> 3;
 			img_len = (img_width_uint8s + 1) * y;
 			if (raw_len < img_len)
 				return stbi__err("not enough pixels");
-			for (j = (uint)0; j < y; ++j)
+			for (j = (uint32)0; j < y; ++j)
 			{
 				var cur = a._out_ + stride * j;
 				uint8* prior;
-				var filter = (int)*rawLocal++;
+				var filter = (int32)*rawLocal++;
 				if (filter > 4)
 					return stbi__err("invalid filter");
 				if (depth < 8)
 				{
 					cur += x * out_n - img_width_uint8s;
 					filter_uint8s = 1;
-					width = (int)img_width_uint8s;
+					width = (int32)img_width_uint8s;
 				}
 
 				prior = cur - stride;
@@ -248,7 +248,7 @@ namespace StbImageBeef
 					if (depth == 16)
 					{
 						cur = a._out_ + stride * j;
-						for (i = (uint)0; i < x; ++i, cur += output_uint8s)
+						for (i = (uint32)0; i < x; ++i, cur += output_uint8s)
 							cur[filter_uint8s + 1] = 255;
 					}
 				}
@@ -256,14 +256,14 @@ namespace StbImageBeef
 
 			if (depth < 8)
 			{
-				for (j = (uint)0; j < y; ++j)
+				for (j = (uint32)0; j < y; ++j)
 				{
 					var cur = a._out_ + stride * j;
 					var _in_ = a._out_ + stride * j + x * out_n - img_width_uint8s;
 					var scale = (uint8)(color == 0 ? stbi__depth_scale_table[depth] : 1);
 					if (depth == 4)
 					{
-						for (k = (int)(x * img_n); k >= 2; k -= 2, ++_in_)
+						for (k = (int32)(x * img_n); k >= 2; k -= 2, ++_in_)
 						{
 							*cur++ = (uint8)(scale * (*_in_ >> 4));
 							*cur++ = (uint8)(scale * (*_in_ & 0x0f));
@@ -274,7 +274,7 @@ namespace StbImageBeef
 					}
 					else if (depth == 2)
 					{
-						for (k = (int)(x * img_n); k >= 4; k -= 4, ++_in_)
+						for (k = (int32)(x * img_n); k >= 4; k -= 4, ++_in_)
 						{
 							*cur++ = (uint8)(scale * (*_in_ >> 6));
 							*cur++ = (uint8)(scale * ((*_in_ >> 4) & 0x03));
@@ -291,7 +291,7 @@ namespace StbImageBeef
 					}
 					else if (depth == 1)
 					{
-						for (k = (int)(x * img_n); k >= 8; k -= 8, ++_in_)
+						for (k = (int32)(x * img_n); k >= 8; k -= 8, ++_in_)
 						{
 							*cur++ = (uint8)(scale * (*_in_ >> 7));
 							*cur++ = (uint8)(scale * ((*_in_ >> 6) & 0x01));
@@ -321,16 +321,16 @@ namespace StbImageBeef
 
 					if (img_n != out_n)
 					{
-						var q = 0;
+						int32 q = 0;
 						cur = a._out_ + stride * j;
 						if (img_n == 1)
-							for (q = (int)(x - 1); q >= 0; --q)
+							for (q = (int32)(x - 1); q >= 0; --q)
 							{
 								cur[q * 2 + 1] = 255;
 								cur[q * 2 + 0] = cur[q];
 							}
 						else
-							for (q = (int)(x - 1); q >= 0; --q)
+							for (q = (int32)(x - 1); q >= 0; --q)
 							{
 								cur[q * 4 + 3] = 255;
 								cur[q * 4 + 2] = cur[q * 3 + 2];
@@ -344,29 +344,29 @@ namespace StbImageBeef
 			{
 				var cur = a._out_;
 				var cur16 = (uint16*)cur;
-				for (i = (uint)0; i < x * y * out_n; ++i, cur16++, cur += 2)
+				for (i = (uint32)0; i < x * y * out_n; ++i, cur16++, cur += 2)
 					*cur16 = (uint16)(((uint16)cur[0] << 8) | cur[1]);
 			}
 
 			return 1;
 		}
 
-		public static int stbi__create_png_image(stbi__png a, uint8* image_data, int image_data_len, int out_n, int depth, int color, int interlaced)
+		public static int32 stbi__create_png_image(stbi__png a, uint8* image_data, int32 image_data_len, int32 out_n, int32 depth, int32 color, int32 interlaced)
 		{
 			uint8* image_data_local = image_data;
-			int image_data_len_local = image_data_len;
+			int32 image_data_len_local = image_data_len;
 
 			var uint8s = depth == 16 ? 2 : 1;
 			var out_uint8s = out_n * uint8s;
 			uint8* final;
-			var p = 0;
+			int32 p = 0;
 			if (interlaced == 0)
 				return stbi__create_png_image_raw(a, image_data_local, image_data_len_local, out_n, a.s.img_x, a.s.img_y, depth,
 					color);
-			final = (uint8*)stbi__malloc_mad3((int)a.s.img_x, (int)a.s.img_y, out_uint8s, 0);
+			final = (uint8*)stbi__malloc_mad3((int32)a.s.img_x, (int32)a.s.img_y, out_uint8s, 0);
 			for (p = 0; p < 7; ++p)
 			{
-				var xorig = scope int[7];
+				var xorig = scope int32[7];
 				xorig[0] = 0;
 				xorig[1] = 4;
 				xorig[2] = 0;
@@ -374,7 +374,7 @@ namespace StbImageBeef
 				xorig[4] = 0;
 				xorig[5] = 1;
 				xorig[6] = 0;
-				var yorig = scope int[7];
+				var yorig = scope int32[7];
 				yorig[0] = 0;
 				yorig[1] = 0;
 				yorig[2] = 4;
@@ -382,7 +382,7 @@ namespace StbImageBeef
 				yorig[4] = 2;
 				yorig[5] = 0;
 				yorig[6] = 1;
-				var xspc = scope int[7];
+				var xspc = scope int32[7];
 				xspc[0] = 8;
 				xspc[1] = 8;
 				xspc[2] = 4;
@@ -390,7 +390,7 @@ namespace StbImageBeef
 				xspc[4] = 2;
 				xspc[5] = 2;
 				xspc[6] = 1;
-				var yspc = scope int[7];
+				var yspc = scope int32[7];
 				yspc[0] = 8;
 				yspc[1] = 8;
 				yspc[2] = 8;
@@ -398,12 +398,12 @@ namespace StbImageBeef
 				yspc[4] = 4;
 				yspc[5] = 2;
 				yspc[6] = 2;
-				var i = 0;
-				var j = 0;
-				var x = 0;
-				var y = 0;
-				x = (int)((a.s.img_x - xorig[p] + xspc[p] - 1) / xspc[p]);
-				y = (int)((a.s.img_y - yorig[p] + yspc[p] - 1) / yspc[p]);
+				int32 i = 0;
+				int32 j = 0;
+				int32 x = 0;
+				int32 y = 0;
+				x = (int32)((a.s.img_x - xorig[p] + xspc[p] - 1) / xspc[p]);
+				y = (int32)((a.s.img_y - yorig[p] + yspc[p] - 1) / yspc[p]);
 				if (x != 0 && y != 0)
 				{
 					var img_len = ((((a.s.img_n * x * depth + 7) >> 3) + 1) * y);
@@ -432,20 +432,20 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__compute_transparency(stbi__png z, uint8* tc, int out_n)
+		public static int32 stbi__compute_transparency(stbi__png z, uint8* tc, int32 out_n)
 		{
 			var s = z.s;
-			int i = 0;
+			int32 i = 0;
 			var pixel_count = s.img_x * s.img_y;
 			var p = z._out_;
 			if (out_n == 2)
-				for (i = (uint)0; i < pixel_count; ++i)
+				for (i = (uint32)0; i < pixel_count; ++i)
 				{
 					p[1] = (uint8)(p[0] == tc[0] ? 0 : 255);
 					p += 2;
 				}
 			else
-				for (i = (uint)0; i < pixel_count; ++i)
+				for (i = (uint32)0; i < pixel_count; ++i)
 				{
 					if (p[0] == tc[0] && p[1] == tc[1] && p[2] == tc[2])
 						p[3] = 0;
@@ -455,20 +455,20 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__compute_transparency16(stbi__png z, uint16* tc, int out_n)
+		public static int32 stbi__compute_transparency16(stbi__png z, uint16* tc, int32 out_n)
 		{
 			var s = z.s;
-			int i = 0;
+			int32 i = 0;
 			var pixel_count = s.img_x * s.img_y;
 			var p = (uint16*)z._out_;
 			if (out_n == 2)
-				for (i = (uint)0; i < pixel_count; ++i)
+				for (i = (uint32)0; i < pixel_count; ++i)
 				{
 					p[1] = (uint16)(p[0] == tc[0] ? 0 : 65535);
 					p += 2;
 				}
 			else
-				for (i = (uint)0; i < pixel_count; ++i)
+				for (i = (uint32)0; i < pixel_count; ++i)
 				{
 					if (p[0] == tc[0] && p[1] == tc[1] && p[2] == tc[2])
 						p[3] = 0;
@@ -478,19 +478,19 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__expand_png_palette(stbi__png a, uint8* palette, int len, int pal_img_n)
+		public static int32 stbi__expand_png_palette(stbi__png a, uint8* palette, int32 len, int32 pal_img_n)
 		{
-			int i = 0;
+			int32 i = 0;
 			var pixel_count = a.s.img_x * a.s.img_y;
 			uint8* p;
 			uint8* temp_out;
 			var orig = a._out_;
-			p = (uint8*)stbi__malloc_mad2((int)pixel_count, pal_img_n, 0);
+			p = (uint8*)stbi__malloc_mad2((int32)pixel_count, pal_img_n, 0);
 			if (p == null)
 				return stbi__err("outofmem");
 			temp_out = p;
 			if (pal_img_n == 3)
-				for (i = (uint)0; i < pixel_count; ++i)
+				for (i = (uint32)0; i < pixel_count; ++i)
 				{
 					var n = orig[i] * 4;
 					p[0] = palette[n];
@@ -499,7 +499,7 @@ namespace StbImageBeef
 					p += 3;
 				}
 			else
-				for (i = (uint)0; i < pixel_count; ++i)
+				for (i = (uint32)0; i < pixel_count; ++i)
 				{
 					var n = orig[i] * 4;
 					p[0] = palette[n];
@@ -517,12 +517,12 @@ namespace StbImageBeef
 		public static void stbi__de_iphone(stbi__png z)
 		{
 			var s = z.s;
-			int i = 0;
+			int32 i = 0;
 			var pixel_count = s.img_x * s.img_y;
 			var p = z._out_;
 			if (s.img_out_n == 3)
 			{
-				for (i = (uint)0; i < pixel_count; ++i)
+				for (i = (uint32)0; i < pixel_count; ++i)
 				{
 					var t = p[0];
 					p[0] = p[2];
@@ -533,7 +533,7 @@ namespace StbImageBeef
 			else
 			{
 				if (stbi__unpremultiply_on_load != 0)
-					for (i = (uint)0; i < pixel_count; ++i)
+					for (i = (uint32)0; i < pixel_count; ++i)
 					{
 						var a = p[3];
 						var t = p[0];
@@ -553,7 +553,7 @@ namespace StbImageBeef
 						p += 4;
 					}
 				else
-					for (i = (uint)0; i < pixel_count; ++i)
+					for (i = (uint32)0; i < pixel_count; ++i)
 					{
 						var t = p[0];
 						p[0] = p[2];
@@ -563,7 +563,7 @@ namespace StbImageBeef
 			}
 		}
 
-		public static int stbi__parse_png_file(stbi__png z, int scan, int req_comp)
+		public static int32 stbi__parse_png_file(stbi__png z, int32 scan, int32 req_comp)
 		{
 			var palette = scope uint8[1024];
 			var pal_img_n = (uint8)0;
@@ -572,15 +572,15 @@ namespace StbImageBeef
 			tc[0] = 0;
 
 			var tc16 = scope uint16[3];
-			var ioff = 0;
-			var idata_limit = 0;
-			int i = 0;
-			var pal_len = 0;
-			var first = 1;
-			var k = 0;
-			var interlace = 0;
-			var color = 0;
-			var is_iphone = 0;
+			int32 ioff = 0;
+			int32 idata_limit = 0;
+			int32 i = 0;
+			int32 pal_len = 0;
+			int32 first = 1;
+			int32 k = 0;
+			int32 interlace = 0;
+			int32 color = 0;
+			int32 is_iphone = 0;
 			var s = z.s;
 			z.expanded = null;
 			z.idata = null;
@@ -594,23 +594,23 @@ namespace StbImageBeef
 				var c = stbi__get_chunk_header(s);
 				switch (c.type)
 				{
-					case ((uint)'C' << 24) + ((uint)'g' << 16) + ((uint)'B' << 8) + (uint)'I':
+					case ((uint32)'C' << 24) + ((uint32)'g' << 16) + ((uint32)'B' << 8) + (uint32)'I':
 						is_iphone = 1;
-						stbi__skip(s, (int)c.length);
+						stbi__skip(s, (int32)c.length);
 						break;
-					case ((uint)'I' << 24) + ((uint)'H' << 16) + ((uint)'D' << 8) + (uint)'R':
+					case ((uint32)'I' << 24) + ((uint32)'H' << 16) + ((uint32)'D' << 8) + (uint32)'R':
 					{
-						var comp = 0;
-						var filter = 0;
+						int32 comp = 0;
+						int32 filter = 0;
 						if (first == 0)
 							return stbi__err("multiple IHDR");
 						first = 0;
 						if (c.length != 13)
 							return stbi__err("bad IHDR len");
-						s.img_x = (int)stbi__get32be(s);
+						s.img_x = (int32)stbi__get32be(s);
 						if (s.img_x > 1 << 24)
 							return stbi__err("too large");
-						s.img_y = (int)stbi__get32be(s);
+						s.img_y = (int32)stbi__get32be(s);
 						if (s.img_y > 1 << 24)
 							return stbi__err("too large");
 						z.depth = stbi__get8(s);
@@ -653,7 +653,7 @@ namespace StbImageBeef
 
 						break;
 					}
-					case ((uint)'P' << 24) + ((uint)'L' << 16) + ((uint)'T' << 8) + (uint)'E':
+					case ((uint32)'P' << 24) + ((uint32)'L' << 16) + ((uint32)'T' << 8) + (uint32)'E':
 					{
 						if (first != 0)
 							return stbi__err("first not IHDR");
@@ -672,7 +672,7 @@ namespace StbImageBeef
 
 						break;
 					}
-					case ((uint)'t' << 24) + ((uint)'R' << 16) + ((uint)'N' << 8) + (uint)'S':
+					case ((uint32)'t' << 24) + ((uint32)'R' << 16) + ((uint32)'N' << 8) + (uint32)'S':
 					{
 						if (first != 0)
 							return stbi__err("first not IHDR");
@@ -691,7 +691,7 @@ namespace StbImageBeef
 							if (c.length > pal_len)
 								return stbi__err("bad tRNS len");
 							pal_img_n = 4;
-							for (i = (uint)0; i < c.length; ++i)
+							for (i = (uint32)0; i < c.length; ++i)
 								palette[i * 4 + 3] = stbi__get8(s);
 						}
 						else
@@ -711,7 +711,7 @@ namespace StbImageBeef
 
 						break;
 					}
-					case ((uint)'I' << 24) + ((uint)'D' << 16) + ((uint)'A' << 8) + (uint)'T':
+					case ((uint32)'I' << 24) + ((uint32)'D' << 16) + ((uint32)'A' << 8) + (uint32)'T':
 					{
 						if (first != 0)
 							return stbi__err("first not IHDR");
@@ -723,7 +723,7 @@ namespace StbImageBeef
 							return 1;
 						}
 
-						if ((int)(ioff + c.length) < (int)ioff)
+						if ((int32)(ioff + c.length) < (int32)ioff)
 							return 0;
 						if (ioff + c.length > idata_limit)
 						{
@@ -738,25 +738,25 @@ namespace StbImageBeef
 							z.idata = p;
 						}
 
-						if (stbi__getn(s, z.idata + ioff, (int)c.length) == 0)
+						if (stbi__getn(s, z.idata + ioff, (int32)c.length) == 0)
 							return stbi__err("outofdata");
 						ioff += c.length;
 						break;
 					}
-					case ((uint)'I' << 24) + ((uint)'E' << 16) + ((uint)'N' << 8) + (uint)'D':
+					case ((uint32)'I' << 24) + ((uint32)'E' << 16) + ((uint32)'N' << 8) + (uint32)'D':
 					{
-						int raw_len = 0;
-						int bpl = 0;
+						int32 raw_len = 0;
+						int32 bpl = 0;
 						if (first != 0)
 							return stbi__err("first not IHDR");
 						if (scan != STBI__SCAN_load)
 							return 1;
 						if (z.idata == null)
 							return stbi__err("no IDAT");
-						bpl = (int)((s.img_x * z.depth + 7) / 8);
-						raw_len = (int)(bpl * s.img_y * s.img_n + s.img_y);
-						z.expanded = (uint8*)stbi_zlib_decode_malloc_guesssize_headerflag((int8*)z.idata, (int)ioff,
-							(int)raw_len, (int*)&raw_len, is_iphone != 0 ? 0 : 1);
+						bpl = (int32)((s.img_x * z.depth + 7) / 8);
+						raw_len = (int32)(bpl * s.img_y * s.img_n + s.img_y);
+						z.expanded = (uint8*)stbi_zlib_decode_malloc_guesssize_headerflag((int8*)z.idata, (int32)ioff,
+							(int32)raw_len, (int32*)&raw_len, is_iphone != 0 ? 0 : 1);
 						if (z.expanded == null)
 							return 0;
 						CRuntime.free(z.idata);
@@ -789,7 +789,7 @@ namespace StbImageBeef
 							s.img_out_n = pal_img_n;
 							if (req_comp >= 3)
 								s.img_out_n = req_comp;
-							if (stbi__expand_png_palette(z, &palette[0], (int)pal_len, s.img_out_n) == 0)
+							if (stbi__expand_png_palette(z, &palette[0], (int32)pal_len, s.img_out_n) == 0)
 								return 0;
 						}
 						else if (has_trans != 0)
@@ -810,7 +810,7 @@ namespace StbImageBeef
 							return stbi__err(invalid_chunk);
 						}
 
-						stbi__skip(s, (int)c.length);
+						stbi__skip(s, (int32)c.length);
 						break;
 				}
 
@@ -818,7 +818,7 @@ namespace StbImageBeef
 			}
 		}
 
-		public static void* stbi__do_png(stbi__png p, int* x, int* y, int* n, int req_comp, stbi__result_info* ri)
+		public static void* stbi__do_png(stbi__png p, int32* x, int32* y, int32* n, int32 req_comp, stbi__result_info* ri)
 		{
 			void* result = null;
 			if (req_comp < 0 || req_comp > 4)
@@ -843,8 +843,8 @@ namespace StbImageBeef
 						return result;
 				}
 
-				*x = (int)p.s.img_x;
-				*y = (int)p.s.img_y;
+				*x = (int32)p.s.img_x;
+				*y = (int32)p.s.img_y;
 				if (n != null)
 					*n = p.s.img_n;
 			}
@@ -858,7 +858,7 @@ namespace StbImageBeef
 			return result;
 		}
 
-		public static void* stbi__png_load(stbi__context s, int* x, int* y, int* comp, int req_comp,
+		public static void* stbi__png_load(stbi__context s, int32* x, int32* y, int32* comp, int32 req_comp,
 			stbi__result_info* ri)
 		{
 			var p = new stbi__png();
@@ -866,15 +866,15 @@ namespace StbImageBeef
 			return stbi__do_png(p, x, y, comp, req_comp, ri);
 		}
 
-		public static int stbi__png_test(stbi__context s)
+		public static int32 stbi__png_test(stbi__context s)
 		{
-			var r = 0;
+			int32 r = 0;
 			r = stbi__check_png_header(s);
 			stbi__rewind(s);
 			return r;
 		}
 
-		public static int stbi__png_info_raw(stbi__png p, int* x, int* y, int* comp)
+		public static int32 stbi__png_info_raw(stbi__png p, int32* x, int32* y, int32* comp)
 		{
 			if (stbi__parse_png_file(p, STBI__SCAN_header, 0) == 0)
 			{
@@ -883,22 +883,22 @@ namespace StbImageBeef
 			}
 
 			if (x != null)
-				*x = (int)p.s.img_x;
+				*x = (int32)p.s.img_x;
 			if (y != null)
-				*y = (int)p.s.img_y;
+				*y = (int32)p.s.img_y;
 			if (comp != null)
 				*comp = p.s.img_n;
 			return 1;
 		}
 
-		public static int stbi__png_info(stbi__context s, int* x, int* y, int* comp)
+		public static int32 stbi__png_info(stbi__context s, int32* x, int32* y, int32* comp)
 		{
 			var p = new stbi__png();
 			p.s = s;
 			return stbi__png_info_raw(p, x, y, comp);
 		}
 
-		public static int stbi__png_is16(stbi__context s)
+		public static int32 stbi__png_is16(stbi__context s)
 		{
 			var p = new stbi__png();
 			p.s = s;

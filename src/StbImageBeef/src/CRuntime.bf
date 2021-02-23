@@ -11,7 +11,7 @@ namespace StbImageBeef
 
 		public static void* malloc(int64 size)
 		{
-			var ptr = Internal.StdMalloc((int)size);
+			var ptr = Internal.StdMalloc((int32)size);
 
 			MemoryStats.Allocated();
 
@@ -20,7 +20,7 @@ namespace StbImageBeef
 
 		public static void memcpy(void* a, void* b, int64 size)
 		{
-			Internal.MemCpy(a, b, (int)size);
+			Internal.MemCpy(a, b, (int32)size);
 		}
 
 		public static void memcpy(void* a, void* b, uint64 size)
@@ -30,7 +30,7 @@ namespace StbImageBeef
 
 		public static void memmove(void* a, void* b, int64 size)
 		{
-			Internal.MemMove(a, b, (int)size);
+			Internal.MemMove(a, b, (int32)size);
 		}
 
 		public static void memmove(void* a, void* b, uint64 size)
@@ -38,12 +38,12 @@ namespace StbImageBeef
 			memmove(a, b, (int64)size);
 		}
 
-		public static int memcmp(void* a, void* b, int64 size)
+		public static int32 memcmp(void* a, void* b, int64 size)
 		{
-			return Internal.MemCmp(a, b, (int)size);
+			return (int32)Internal.MemCmp(a, b, size);
 		}
 
-		public static int memcmp(void* a, void* b, uint64 size)
+		public static int32 memcmp(void* a, void* b, uint64 size)
 		{
 			return memcmp(a, b, (int64)size);
 		}
@@ -58,17 +58,17 @@ namespace StbImageBeef
 			MemoryStats.Freed();
 		}
 
-		public static void memset(void* ptr, int value, int64 size)
+		public static void memset(void* ptr, int32 value, int64 size)
 		{
-			Internal.MemSet(ptr, (uint8)value, (int)size);
+			Internal.MemSet(ptr, (uint8)value, (int32)size);
 		}
 
-		public static void memset(void* ptr, int value, uint64 size)
+		public static void memset(void* ptr, int32 value, uint64 size)
 		{
 			memset(ptr, value, (int64)size);
 		}
 
-		public static uint _lrotl(uint x, int y)
+		public static uint32 _lrotl(uint32 x, int32 y)
 		{
 			return (x << y) | (x >> (32 - y));
 		}
@@ -91,14 +91,14 @@ namespace StbImageBeef
 			return realloc(a, (int64)newSize);
 		}
 
-		public static int abs(int v)
+		public static int32 abs(int32 v)
 		{
 			return Math.Abs(v);
 		}
 
 		public static void SetArray<T>(T[] data, T value)
 		{
-			for (var i = 0; i < data.Count; ++i)
+			for (int32 i = 0; i < data.Count; ++i)
 				data[i] = value;
 		}
 	}

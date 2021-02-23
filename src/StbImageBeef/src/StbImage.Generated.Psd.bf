@@ -4,19 +4,19 @@ namespace StbImageBeef
 {
 	extension StbImage
 	{
-		public static int stbi__psd_test(stbi__context s)
+		public static int32 stbi__psd_test(stbi__context s)
 		{
-			var r = stbi__get32be(s) == 0x38425053 ? 1 : 0;
+			int32 r = stbi__get32be(s) == 0x38425053 ? 1 : 0;
 			stbi__rewind(s);
 			return r;
 		}
 
-		public static int stbi__psd_decode_rle(stbi__context s, uint8* p, int pixelCount)
+		public static int32 stbi__psd_decode_rle(stbi__context s, uint8* p, int32 pixelCount)
 		{
 			uint8 *pLocal = p;
-			var count = 0;
-			var nleft = 0;
-			var len = 0;
+			int32 count = 0;
+			int32 nleft = 0;
+			int32 len = 0;
 			count = 0;
 			while ((nleft = pixelCount - count) > 0)
 			{
@@ -57,17 +57,17 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static void* stbi__psd_load(stbi__context s, int* x, int* y, int* comp, int req_comp,
-			stbi__result_info* ri, int bpc)
+		public static void* stbi__psd_load(stbi__context s, int32* x, int32* y, int32* comp, int32 req_comp,
+			stbi__result_info* ri, int32 bpc)
 		{
-			var pixelCount = 0;
-			var channelCount = 0;
-			var compression = 0;
-			var channel = 0;
-			var i = 0;
-			var bitdepth = 0;
-			var w = 0;
-			var h = 0;
+			int32 pixelCount = 0;
+			int32 channelCount = 0;
+			int32 compression = 0;
+			int32 channel = 0;
+			int32 i = 0;
+			int32 bitdepth = 0;
+			int32 w = 0;
+			int32 h = 0;
 			uint8* _out_;
 			if (stbi__get32be(s) != 0x38425053)
 				return (uint8*)(stbi__err("not PSD") != 0 ? (uint8*)null : null);
@@ -77,16 +77,16 @@ namespace StbImageBeef
 			channelCount = stbi__get16be(s);
 			if (channelCount < 0 || channelCount > 16)
 				return (uint8*)(stbi__err("wrong channel count") != 0 ? (uint8*)null : null);
-			h = (int)stbi__get32be(s);
-			w = (int)stbi__get32be(s);
+			h = (int32)stbi__get32be(s);
+			w = (int32)stbi__get32be(s);
 			bitdepth = stbi__get16be(s);
 			if (bitdepth != 8 && bitdepth != 16)
 				return (uint8*)(stbi__err("unsupported bit depth") != 0 ? (uint8*)null : null);
 			if (stbi__get16be(s) != 3)
 				return (uint8*)(stbi__err("wrong color format") != 0 ? (uint8*)null : null);
-			stbi__skip(s, (int)stbi__get32be(s));
-			stbi__skip(s, (int)stbi__get32be(s));
-			stbi__skip(s, (int)stbi__get32be(s));
+			stbi__skip(s, (int32)stbi__get32be(s));
+			stbi__skip(s, (int32)stbi__get32be(s));
+			stbi__skip(s, (int32)stbi__get32be(s));
 			compression = stbi__get16be(s);
 			if (compression > 1)
 				return (uint8*)(stbi__err("bad compression") != 0 ? (uint8*)null : null);
@@ -217,14 +217,14 @@ namespace StbImageBeef
 			return _out_;
 		}
 
-		public static int stbi__psd_info(stbi__context s, int* x, int* y, int* comp)
+		public static int32 stbi__psd_info(stbi__context s, int32* x, int32* y, int32* comp)
 		{
-			int *xLocal = x;
-			int *yLocal = y;
-			int *compLocal = comp;
-			var channelCount = 0;
-			var dummy = 0;
-			var depth = 0;
+			int32 *xLocal = x;
+			int32 *yLocal = y;
+			int32 *compLocal = comp;
+			int32 channelCount = 0;
+			int32 dummy = 0;
+			int32 depth = 0;
 			if (xLocal == null)
 				xLocal = &dummy;
 			if (yLocal == null)
@@ -251,8 +251,8 @@ namespace StbImageBeef
 				return 0;
 			}
 
-			*yLocal = (int)stbi__get32be(s);
-			*xLocal = (int)stbi__get32be(s);
+			*yLocal = (int32)stbi__get32be(s);
+			*xLocal = (int32)stbi__get32be(s);
 			depth = stbi__get16be(s);
 			if (depth != 8 && depth != 16)
 			{
@@ -270,10 +270,10 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__psd_is16(stbi__context s)
+		public static int32 stbi__psd_is16(stbi__context s)
 		{
-			var channelCount = 0;
-			var depth = 0;
+			int32 channelCount = 0;
+			int32 depth = 0;
 			if (stbi__get32be(s) != 0x38425053)
 			{
 				stbi__rewind(s);

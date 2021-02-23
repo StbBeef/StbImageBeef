@@ -7,7 +7,7 @@ namespace StbImageBeef
 #endif
 	class AnimatedFrameResult : ImageResult
 	{
-		public int Delay
+		public int32 Delay
 		{
 			get; set;
 		}

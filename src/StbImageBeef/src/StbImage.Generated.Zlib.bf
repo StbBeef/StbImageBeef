@@ -8,7 +8,7 @@ namespace StbImageBeef
 		{
 			public uint16[1 << 9] fast;
 			public uint16[16] firstcode;
-			public int[17] maxcode;
+			public int32[17] maxcode;
 			public uint16[16] firstsymbol;
 			public uint8[288] size;
 			public uint16[288] value;
@@ -18,25 +18,25 @@ namespace StbImageBeef
 		{
 			public uint8* zbuffer;
 			public uint8* zbuffer_end;
-			public int num_bits;
-			public uint code_buffer;
+			public int32 num_bits;
+			public uint32 code_buffer;
 			public int8* zout;
 			public int8* zout_start;
 			public int8* zout_end;
-			public int z_expandable;
+			public int32 z_expandable;
 			public stbi__zhuffman z_length;
 			public stbi__zhuffman z_distance;
 		}
 
-		public static int[?] stbi__zlength_base = .(3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195,
+		public static int32[?] stbi__zlength_base = .(3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195,
 			227, 258, 0, 0);
 
-		public static int[?] stbi__zlength_extra = .(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, 0, 0);
+		public static int32[?] stbi__zlength_extra = .(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, 0, 0);
 
-		public static int[?] stbi__zdist_base = .(1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097,
+		public static int32[?] stbi__zdist_base = .(1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097,
 			6145, 8193, 12289, 16385, 24577, 0, 0);
 
-		public static int[?] stbi__zdist_extra = .(0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13);
+		public static int32[?] stbi__zdist_extra = .(0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13);
 
 		public static uint8[?] length_dezigzag = .(16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15 );
 
@@ -54,14 +54,14 @@ namespace StbImageBeef
 
 		public static uint8[?] stbi__zdefault_distance = .(5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5);
 
-		public static int stbi__zbuild_huffman(stbi__zhuffman* z, uint8* sizelist, int num)
+		public static int32 stbi__zbuild_huffman(stbi__zhuffman* z, uint8* sizelist, int32 num)
 		{
-			var i = 0;
-			var k = 0;
-			var code = 0;
-			var next_code = scope int[16];
-			var sizes = scope int[17];
-			CRuntime.memset(&sizes[0], 0, (uint64)sizeof(int));
+			int32 i = 0;
+			int32 k = 0;
+			int32 code = 0;
+			var next_code = scope int32[16];
+			var sizes = scope int32[17];
+			CRuntime.memset(&sizes[0], 0, (uint64)sizeof(int32));
 			CRuntime.memset(&z.fast[0], 0, (uint64)((1 << 9) * sizeof(uint16)));
 			for (i = 0; i < num; ++i)
 				++sizes[sizelist[i]];
@@ -87,7 +87,7 @@ namespace StbImageBeef
 			z.maxcode[16] = 0x10000;
 			for (i = 0; i < num; ++i)
 			{
-				var s = (int)sizelist[i];
+				var s = (int32)sizelist[i];
 				if (s != 0)
 				{
 					var c = next_code[s] - z.firstcode[s] + z.firstsymbol[s];
@@ -122,28 +122,28 @@ namespace StbImageBeef
 		{
 			repeat
 			{
-				z.code_buffer |= (uint)stbi__zget8(z) << z.num_bits;
+				z.code_buffer |= (uint32)stbi__zget8(z) << z.num_bits;
 				z.num_bits += 8;
 			} while (z.num_bits <= 24);
 		}
 
-		public static uint stbi__zreceive(stbi__zbuf* z, int n)
+		public static uint32 stbi__zreceive(stbi__zbuf* z, int32 n)
 		{
-			uint k = 0;
+			uint32 k = 0;
 			if (z.num_bits < n)
 				stbi__fill_bits(z);
-			k = (uint)(z.code_buffer & ((1 << n) - 1));
+			k = (uint32)(z.code_buffer & ((1 << n) - 1));
 			z.code_buffer >>= n;
 			z.num_bits -= n;
 			return k;
 		}
 
-		public static int stbi__zhuffman_decode_slowpath(stbi__zbuf* a, stbi__zhuffman* z)
+		public static int32 stbi__zhuffman_decode_slowpath(stbi__zbuf* a, stbi__zhuffman* z)
 		{
-			var b = 0;
-			var s = 0;
-			var k = 0;
-			k = stbi__bit_reverse((int)a.code_buffer, 16);
+			int32 b = 0;
+			int32 s = 0;
+			int32 k = 0;
+			k = stbi__bit_reverse((int32)a.code_buffer, 16);
 			for (s = 9 + 1; ; ++s)
 				if (k < z.maxcode[s])
 					break;
@@ -155,13 +155,13 @@ namespace StbImageBeef
 			return z.value[b];
 		}
 
-		public static int stbi__zhuffman_decode(stbi__zbuf* a, stbi__zhuffman* z)
+		public static int32 stbi__zhuffman_decode(stbi__zbuf* a, stbi__zhuffman* z)
 		{
-			var b = 0;
-			var s = 0;
+			int32 b = 0;
+			int32 s = 0;
 			if (a.num_bits < 16)
 				stbi__fill_bits(a);
-			b = z.fast[(int)(a.code_buffer & ((1 << 9) - 1))];
+			b = z.fast[(int32)(a.code_buffer & ((1 << 9) - 1))];
 			if (b != 0)
 			{
 				s = b >> 9;
@@ -173,17 +173,17 @@ namespace StbImageBeef
 			return stbi__zhuffman_decode_slowpath(a, z);
 		}
 
-		public static int stbi__zexpand(stbi__zbuf* z, int8* zout, int n)
+		public static int32 stbi__zexpand(stbi__zbuf* z, int8* zout, int32 n)
 		{
 			int8* q;
-			var cur = 0;
-			var limit = 0;
-			var old_limit = 0;
+			int32 cur = 0;
+			int32 limit = 0;
+			int32 old_limit = 0;
 			z.zout = zout;
 			if (z.z_expandable == 0)
 				return stbi__err("output buffer limit");
-			cur = (int)(z.zout - z.zout_start);
-			limit = old_limit = (int)(z.zout_end - z.zout_start);
+			cur = (int32)(z.zout - z.zout_start);
+			limit = old_limit = (int32)(z.zout_end - z.zout_start);
 			while (cur + n > limit)
 				limit *= 2;
 			q = (int8*)CRuntime.realloc(z.zout_start, (uint64)limit);
@@ -195,7 +195,7 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__parse_huffman_block(stbi__zbuf* a)
+		public static int32 stbi__parse_huffman_block(stbi__zbuf* a)
 		{
 			var zout = a.zout;
 			for (; ; )
@@ -217,8 +217,8 @@ namespace StbImageBeef
 				else
 				{
 					uint8* p;
-					var len = 0;
-					var dist = 0;
+					int32 len = 0;
+					int32 dist = 0;
 					if (z == 256)
 					{
 						a.zout = zout;
@@ -228,13 +228,13 @@ namespace StbImageBeef
 					z -= 257;
 					len = stbi__zlength_base[z];
 					if (stbi__zlength_extra[z] != 0)
-						len += (int)stbi__zreceive(a, stbi__zlength_extra[z]);
+						len += (int32)stbi__zreceive(a, stbi__zlength_extra[z]);
 					z = stbi__zhuffman_decode(a, &a.z_distance);
 					if (z < 0)
 						return stbi__err("bad huffman code");
 					dist = stbi__zdist_base[z];
 					if (stbi__zdist_extra[z] != 0)
-						dist += (int)stbi__zreceive(a, stbi__zdist_extra[z]);
+						dist += (int32)stbi__zreceive(a, stbi__zdist_extra[z]);
 					if (zout - a.zout_start < dist)
 						return stbi__err("bad dist");
 					if (zout + len > a.zout_end)
@@ -266,21 +266,21 @@ namespace StbImageBeef
 			}
 		}
 
-		public static int stbi__compute_huffman_codes(stbi__zbuf* a)
+		public static int32 stbi__compute_huffman_codes(stbi__zbuf* a)
 		{
 			stbi__zhuffman z_codelength = default;
 			var lencodes = scope uint8[286 + 32 + 137];
 			var codelength_sizes = scope uint8[19];
-			var i = 0;
-			var n = 0;
-			var hlit = (int)(stbi__zreceive(a, 5) + 257);
-			var hdist = (int)(stbi__zreceive(a, 5) + 1);
-			var hclen = (int)(stbi__zreceive(a, 4) + 4);
+			int32 i = 0;
+			int32 n = 0;
+			var hlit = (int32)(stbi__zreceive(a, 5) + 257);
+			var hdist = (int32)(stbi__zreceive(a, 5) + 1);
+			var hclen = (int32)(stbi__zreceive(a, 4) + 4);
 			var ntot = hlit + hdist;
 			CRuntime.memset(&codelength_sizes[0], 0, (uint64)(19 * sizeof(uint8)));
 			for (i = 0; i < hclen; ++i)
 			{
-				var s = (int)stbi__zreceive(a, 3);
+				var s = (int32)stbi__zreceive(a, 3);
 				codelength_sizes[length_dezigzag[i]] = (uint8)s;
 			}
 
@@ -301,18 +301,18 @@ namespace StbImageBeef
 					var fill = (uint8)0;
 					if (c == 16)
 					{
-						c = (int)(stbi__zreceive(a, 2) + 3);
+						c = (int32)(stbi__zreceive(a, 2) + 3);
 						if (n == 0)
 							return stbi__err("bad codelengths");
 						fill = lencodes[n - 1];
 					}
 					else if (c == 17)
 					{
-						c = (int)(stbi__zreceive(a, 3) + 3);
+						c = (int32)(stbi__zreceive(a, 3) + 3);
 					}
 					else
 					{
-						c = (int)(stbi__zreceive(a, 7) + 11);
+						c = (int32)(stbi__zreceive(a, 7) + 11);
 					}
 
 					if (ntot - n < c)
@@ -331,12 +331,12 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__parse_uncompressed_block(stbi__zbuf* a)
+		public static int32 stbi__parse_uncompressed_block(stbi__zbuf* a)
 		{
 			var header = scope uint8[4];
-			var len = 0;
-			var nlen = 0;
-			var k = 0;
+			int32 len = 0;
+			int32 nlen = 0;
+			int32 k = 0;
 			if ((a.num_bits & 7) != 0)
 				stbi__zreceive(a, a.num_bits & 7);
 			k = 0;
@@ -364,11 +364,11 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__parse_zlib_header(stbi__zbuf* a)
+		public static int32 stbi__parse_zlib_header(stbi__zbuf* a)
 		{
-			var cmf = (int)stbi__zget8(a);
+			var cmf = (int32)stbi__zget8(a);
 			var cm = cmf & 15;
-			var flg = (int)stbi__zget8(a);
+			var flg = (int32)stbi__zget8(a);
 			if ((cmf * 256 + flg) % 31 != 0)
 				return stbi__err("bad zlib header");
 			if ((flg & 32) != 0)
@@ -378,10 +378,10 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__parse_zlib(stbi__zbuf* a, int parse_header)
+		public static int32 stbi__parse_zlib(stbi__zbuf* a, int32 parse_header)
 		{
-			var final = 0;
-			var type = 0;
+			int32 final = 0;
+			int32 type = 0;
 			if (parse_header != 0)
 				if (stbi__parse_zlib_header(a) == 0)
 					return 0;
@@ -389,8 +389,8 @@ namespace StbImageBeef
 			a.code_buffer = 0;
 			repeat
 			{
-				final = (int)stbi__zreceive(a, 1);
-				type = (int)stbi__zreceive(a, 2);
+				final = (int32)stbi__zreceive(a, 1);
+				type = (int32)stbi__zreceive(a, 2);
 				if (type == 0)
 				{
 					if (stbi__parse_uncompressed_block(a) == 0)
@@ -426,7 +426,7 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__do_zlib(stbi__zbuf* a, int8* obuf, int olen, int exp, int parse_header)
+		public static int32 stbi__do_zlib(stbi__zbuf* a, int8* obuf, int32 olen, int32 exp, int32 parse_header)
 		{
 			a.zout_start = obuf;
 			a.zout = obuf;
@@ -435,7 +435,7 @@ namespace StbImageBeef
 			return stbi__parse_zlib(a, parse_header);
 		}
 
-		public static int8* stbi_zlib_decode_malloc_guesssize(int8* buffer, int len, int initial_size, int* outlen)
+		public static int8* stbi_zlib_decode_malloc_guesssize(int8* buffer, int32 len, int32 initial_size, int32* outlen)
 		{
 			stbi__zbuf a = default;
 			var p = (int8*)stbi__malloc((uint64)initial_size);
@@ -446,7 +446,7 @@ namespace StbImageBeef
 			if (stbi__do_zlib(&a, p, initial_size, 1, 1) != 0)
 			{
 				if (outlen != null)
-					*outlen = (int)(a.zout - a.zout_start);
+					*outlen = (int32)(a.zout - a.zout_start);
 				return a.zout_start;
 			}
 
@@ -454,13 +454,13 @@ namespace StbImageBeef
 			return null;
 		}
 
-		public static int8* stbi_zlib_decode_malloc(int8* buffer, int len, int* outlen)
+		public static int8* stbi_zlib_decode_malloc(int8* buffer, int32 len, int32* outlen)
 		{
 			return stbi_zlib_decode_malloc_guesssize(buffer, len, 16384, outlen);
 		}
 
-		public static int8* stbi_zlib_decode_malloc_guesssize_headerflag(int8* buffer, int len, int initial_size,
-			int* outlen, int parse_header)
+		public static int8* stbi_zlib_decode_malloc_guesssize_headerflag(int8* buffer, int32 len, int32 initial_size,
+			int32* outlen, int32 parse_header)
 		{
 			stbi__zbuf a = default;
 			var p = (int8*)stbi__malloc((uint64)initial_size);
@@ -471,7 +471,7 @@ namespace StbImageBeef
 			if (stbi__do_zlib(&a, p, initial_size, 1, parse_header) != 0)
 			{
 				if (outlen != null)
-					*outlen = (int)(a.zout - a.zout_start);
+					*outlen = (int32)(a.zout - a.zout_start);
 				return a.zout_start;
 			}
 
@@ -479,17 +479,17 @@ namespace StbImageBeef
 			return null;
 		}
 
-		public static int stbi_zlib_decode_buffer(int8* obuffer, int olen, int8* ibuffer, int ilen)
+		public static int32 stbi_zlib_decode_buffer(int8* obuffer, int32 olen, int8* ibuffer, int32 ilen)
 		{
 			stbi__zbuf a = default;
 			a.zbuffer = (uint8*)ibuffer;
 			a.zbuffer_end = (uint8*)ibuffer + ilen;
 			if (stbi__do_zlib(&a, obuffer, olen, 0, 1) != 0)
-				return (int)(a.zout - a.zout_start);
+				return (int32)(a.zout - a.zout_start);
 			return -1;
 		}
 
-		public static int8* stbi_zlib_decode_noheader_malloc(int8* buffer, int len, int* outlen)
+		public static int8* stbi_zlib_decode_noheader_malloc(int8* buffer, int32 len, int32* outlen)
 		{
 			stbi__zbuf a = default;
 			var p = (int8*)stbi__malloc((uint64)16384);
@@ -500,7 +500,7 @@ namespace StbImageBeef
 			if (stbi__do_zlib(&a, p, 16384, 1, 0) != 0)
 			{
 				if (outlen != null)
-					*outlen = (int)(a.zout - a.zout_start);
+					*outlen = (int32)(a.zout - a.zout_start);
 				return a.zout_start;
 			}
 
@@ -508,13 +508,13 @@ namespace StbImageBeef
 			return null;
 		}
 
-		public static int stbi_zlib_decode_noheader_buffer(int8* obuffer, int olen, int8* ibuffer, int ilen)
+		public static int32 stbi_zlib_decode_noheader_buffer(int8* obuffer, int32 olen, int8* ibuffer, int32 ilen)
 		{
 			stbi__zbuf a = default;
 			a.zbuffer = (uint8*)ibuffer;
 			a.zbuffer_end = (uint8*)ibuffer + ilen;
 			if (stbi__do_zlib(&a, obuffer, olen, 0, 0) != 0)
-				return (int)(a.zout - a.zout_start);
+				return (int32)(a.zout - a.zout_start);
 			return -1;
 		}
 	}

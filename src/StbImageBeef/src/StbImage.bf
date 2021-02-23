@@ -12,18 +12,18 @@ namespace StbImageBeef
 	{
 		public static String LastError;
 
-		public const int STBI__ZFAST_BITS = 9;
+		public const int32 STBI__ZFAST_BITS = 9;
 
 
 		public static String stbi__g_failure_reason;
-		public static int stbi__vertically_flip_on_load;
+		public static int32 stbi__vertically_flip_on_load;
 
 		public class stbi__context
 		{
-			public int img_n = 0;
-			public int img_out_n = 0;
-			public int img_x = 0;
-			public int img_y = 0;
+			public int32 img_n = 0;
+			public int32 img_out_n = 0;
+			public int32 img_x = 0;
+			public int32 img_y = 0;
 
 			public this(Stream stream)
 			{
@@ -38,19 +38,19 @@ namespace StbImageBeef
 
 		public struct img_comp
 		{
-			public int id;
-			public int h, v;
-			public int tq;
-			public int hd, ha;
-			public int dc_pred;
+			public int32 id;
+			public int32 h, v;
+			public int32 tq;
+			public int32 hd, ha;
+			public int32 dc_pred;
 
-			public int x, y, w2, h2;
+			public int32 x, y, w2, h2;
 			public uint8* data;
 			public void* raw_data;
 			public void* raw_coeff;
 			public uint8* linebuf;
 			public int16* coeff; // progressive only
-			public int coeff_w, coeff_h; // number of 8x8 coefficient blocks
+			public int32 coeff_w, coeff_h; // number of 8x8 coefficient blocks
 		}
 
 		public class stbi__jpeg
@@ -60,65 +60,65 @@ namespace StbImageBeef
 			public readonly int16[][] fast_ac;
 			public readonly stbi__huffman[4] huff_ac;
 			public readonly stbi__huffman[4] huff_dc;
-			public int app14_color_transform; // Adobe APP14 tag
-			public int code_bits; // number of valid bits
+			public int32 app14_color_transform; // Adobe APP14 tag
+			public int32 code_bits; // number of valid bits
 
-			public uint code_buffer; // jpeg entropy-coded buffer
-			public int eob_run;
+			public uint32 code_buffer; // jpeg entropy-coded buffer
+			public int32 eob_run;
 
 			// kernels
-			public function void (uint8* output, int out_stride, int16* data) idct_block_kernel;
+			public function void (uint8* output, int32 out_stride, int16* data) idct_block_kernel;
 
 			// definition of jpeg image component
 			public img_comp[] img_comp = new img_comp[4];
 
 			// sizes for components, interleaved MCUs
-			public int img_h_max, img_v_max;
-			public int img_mcu_w, img_mcu_h;
-			public int img_mcu_x, img_mcu_y;
-			public int jfif;
+			public int32 img_h_max, img_v_max;
+			public int32 img_mcu_w, img_mcu_h;
+			public int32 img_mcu_x, img_mcu_y;
+			public int32 jfif;
 			public uint8 marker; // marker seen while filling entropy buffer
-			public int nomore; // flag if we saw a marker so must stop
-			public int[] order = new int[4];
+			public int32 nomore; // flag if we saw a marker so must stop
+			public int32[] order = new int32[4];
 
-			public int progressive;
-			public function uint8* (uint8* a, uint8* b, uint8* c, int d, int e) resample_row_hv_2_kernel;
-			public int restart_interval, todo;
-			public int rgb;
+			public int32 progressive;
+			public function uint8* (uint8* a, uint8* b, uint8* c, int32 d, int32 e) resample_row_hv_2_kernel;
+			public int32 restart_interval, todo;
+			public int32 rgb;
 			public stbi__context s;
 
-			public int scan_n;
-			public int spec_end;
-			public int spec_start;
-			public int succ_high;
-			public int succ_low;
+			public int32 scan_n;
+			public int32 spec_end;
+			public int32 spec_start;
+			public int32 succ_high;
+			public int32 succ_low;
 
 			
-			public function void (uint8* output, uint8* y, uint8* pcb, uint8* pcr, int count, int step) YCbCr_to_RGB_kernel;
+			public function void (uint8* output, uint8* y, uint8* pcb, uint8* pcr, int32 count, int32 step) YCbCr_to_RGB_kernel;
 
 			public this()
 			{
 				fast_ac = new int16[4][];
-				for (var i = 0; i < fast_ac.Count; ++i)
+				for (int32 i = 0; i < fast_ac.Count; ++i)
 					fast_ac[i] = new int16[1 << STBI__ZFAST_BITS];
 
 				dequant = new uint16[4][];
-				for (var i = 0; i < dequant.Count; ++i)
+				for (int32 i = 0; i < dequant.Count; ++i)
 					dequant[i] = new uint16[64];
 			}
 		}
 
 		public class stbi__resample
 		{
-			public int hs;
+			public int32 hs;
 			public uint8* line0;
 			public uint8* line1;
 
-			public function uint8* (uint8* a, uint8* b, uint8* c, int d, int e) resample;
-			public int vs;
-			public int w_lores;
-			public int ypos;
-			public int ystep;
+			public function uint8* (uint8* a, uint8* b, uint8* c, int32 d, int32 e) resample;
+			public int32 vs;
+			public int32 w_lores;
+			public int32 ypos;
+			public int32 ystep;
 		}
 
 		public struct stbi__gif_lzw
@@ -132,29 +132,29 @@ namespace StbImageBeef
 		{
 			public uint8* _out_;
 			public uint8* background;
-			public int bgindex;
+			public int32 bgindex;
 			public stbi__gif_lzw* codes = (stbi__gif_lzw*)stbi__malloc(8192 * sizeof(stbi__gif_lzw));
 			public uint8* color_table;
-			public int cur_x;
-			public int cur_y;
-			public int delay;
-			public int eflags;
-			public int flags;
-			public int h;
+			public int32 cur_x;
+			public int32 cur_y;
+			public int32 delay;
+			public int32 eflags;
+			public int32 flags;
+			public int32 h;
 			public uint8* history;
-			public int lflags;
-			public int line_size;
+			public int32 lflags;
+			public int32 line_size;
 			public uint8* lpal;
-			public int max_x;
-			public int max_y;
+			public int32 max_x;
+			public int32 max_y;
 			public uint8* pal;
-			public int parse;
-			public int ratio;
-			public int start_x;
-			public int start_y;
-			public int step;
-			public int transparent;
-			public int w;
+			public int32 parse;
+			public int32 ratio;
+			public int32 start_x;
+			public int32 start_y;
+			public int32 step;
+			public int32 transparent;
+			public int32 w;
 
 			public this()
 			{
@@ -189,25 +189,25 @@ namespace StbImageBeef
 			}
 		}
 
-		private static void* stbi__malloc(int size)
+		private static void* stbi__malloc(int32 size)
 		{
 			return CRuntime.malloc((uint64)size);
 		}
 
 		private static void* stbi__malloc(uint64 size)
 		{
-			return stbi__malloc((int)size);
+			return stbi__malloc((int32)size);
 		}
 
-		private static int stbi__err(String str)
+		private static int32 stbi__err(String str)
 		{
 			LastError = str;
 			return 0;
 		}
 
-		public static void stbi__gif_parse_colortable(stbi__context s, uint8* pal, int num_entries, int transp)
+		public static void stbi__gif_parse_colortable(stbi__context s, uint8* pal, int32 num_entries, int32 transp)
 		{
-			int i;
+			int32 i;
 			for (i = 0; i < num_entries; ++i)
 			{
 				pal[i * 4 + 2] = stbi__get8(s);
@@ -222,7 +222,7 @@ namespace StbImageBeef
 			return s.Stream.Read<uint8>();
 		}
 
-		public static void stbi__skip(stbi__context s, int skip)
+		public static void stbi__skip(stbi__context s, int32 skip)
 		{
 			s.Stream.Seek(skip, .Relative);
 		}
@@ -232,14 +232,14 @@ namespace StbImageBeef
 			s.Stream.Seek(0, .Absolute);
 		}
 
-		public static int stbi__at_eof(stbi__context s)
+		public static int32 stbi__at_eof(stbi__context s)
 		{
 			return s.Stream.Position == s.Stream.Length ? 1 : 0;
 		}
 
-		public static int stbi__getn(stbi__context s, uint8* buf, int size)
+		public static int32 stbi__getn(stbi__context s, uint8* buf, int32 size)
 		{
-			int i = 0;
+			int32 i = 0;
 			for(; i < size; ++i)
 			{
 				if (stbi__at_eof(s) == 1)

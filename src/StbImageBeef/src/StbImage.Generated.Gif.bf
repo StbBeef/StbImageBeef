@@ -4,27 +4,27 @@ namespace StbImageBeef
 {
 	extension StbImage
 	{
-		public static int stbi__gif_test_raw(stbi__context s)
+		public static int32 stbi__gif_test_raw(stbi__context s)
 		{
-			var sz = 0;
+			int32 sz = 0;
 			if (stbi__get8(s) != 'G' || stbi__get8(s) != 'I' || stbi__get8(s) != 'F' || stbi__get8(s) != '8')
 				return 0;
 			sz = stbi__get8(s);
-			if (sz != (int)'9' && sz != (int)'7')
+			if (sz != (int32)'9' && sz != (int32)'7')
 				return 0;
 			if (stbi__get8(s) != 'a')
 				return 0;
 			return 1;
 		}
 
-		public static int stbi__gif_test(stbi__context s)
+		public static int32 stbi__gif_test(stbi__context s)
 		{
 			var r = stbi__gif_test_raw(s);
 			stbi__rewind(s);
 			return r;
 		}
 
-		public static int stbi__gif_header(stbi__context s, stbi__gif g, int* comp, int is_info)
+		public static int32 stbi__gif_header(stbi__context s, stbi__gif g, int32* comp, int32 is_info)
 		{
 			uint8 version = 0;
 			if (stbi__get8(s) != 'G' || stbi__get8(s) != 'I' || stbi__get8(s) != 'F' || stbi__get8(s) != '8')
@@ -50,7 +50,7 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__gif_info_raw(stbi__context s, int* x, int* y, int* comp)
+		public static int32 stbi__gif_info_raw(stbi__context s, int32* x, int32* y, int32* comp)
 		{
 			var g = new stbi__gif();
 			if (stbi__gif_header(s, g, comp, 1) == 0)
@@ -71,7 +71,7 @@ namespace StbImageBeef
 		{
 			uint8* p;
 			uint8* c;
-			var idx = 0;
+			int32 idx = 0;
 			if (g.codes[code].prefix >= 0)
 				stbi__out_gif_code(g, (uint16)g.codes[code].prefix);
 			if (g.cur_y >= g.max_y)
@@ -105,16 +105,16 @@ namespace StbImageBeef
 		public static uint8* stbi__process_gif_raster(stbi__context s, stbi__gif g)
 		{
 			uint8 lzw_cs = 0;
-			var len = 0;
-			var init_code = 0;
-			uint first = 0;
-			var codesize = 0;
-			var codemask = 0;
-			var avail = 0;
-			var oldcode = 0;
-			var bits = 0;
-			var valid_bits = 0;
-			var clear = 0;
+			int32 len = 0;
+			int32 init_code = 0;
+			uint32 first = 0;
+			int32 codesize = 0;
+			int32 codemask = 0;
+			int32 avail = 0;
+			int32 oldcode = 0;
+			int32 bits = 0;
+			int32 valid_bits = 0;
+			int32 clear = 0;
 			stbi__gif_lzw* p;
 			lzw_cs = stbi__get8(s);
 			if (lzw_cs > 12)
@@ -203,12 +203,12 @@ namespace StbImageBeef
 				}
 		}
 
-		public static uint8* stbi__gif_load_next(stbi__context s, stbi__gif g, int* comp, int req_comp, uint8* two_back)
+		public static uint8* stbi__gif_load_next(stbi__context s, stbi__gif g, int32* comp, int32 req_comp, uint8* two_back)
 		{
-			var dispose = 0;
-			var first_frame = 0;
-			var pi = 0;
-			var pcount = 0;
+			int32 dispose = 0;
+			int32 first_frame = 0;
+			int32 pi = 0;
+			int32 pcount = 0;
 			first_frame = 0;
 			if (g._out_ == null)
 			{
@@ -252,15 +252,15 @@ namespace StbImageBeef
 			CRuntime.memset(g.history, 0x00, (uint64)(g.w * g.h));
 			for (; ; )
 			{
-				var tag = (int)stbi__get8(s);
+				var tag = (int32)stbi__get8(s);
 				switch (tag)
 				{
 					case 0x2C:
 					{
-						var x = 0;
-						var y = 0;
-						var w = 0;
-						var h = 0;
+						int32 x = 0;
+						int32 y = 0;
+						int32 w = 0;
+						int32 h = 0;
 						uint8* o;
 						x = stbi__get16le(s);
 						y = stbi__get16le(s);
@@ -320,8 +320,8 @@ namespace StbImageBeef
 					}
 					case 0x21:
 					{
-						var len = 0;
-						var ext = (int)stbi__get8(s);
+						int32 len = 0;
+						var ext = (int32)stbi__get8(s);
 						if (ext == 0xF9)
 						{
 							len = stbi__get8(s);
@@ -362,17 +362,17 @@ namespace StbImageBeef
 			}
 		}
 
-		public static void* stbi__load_gif_main(stbi__context s, int** delays, int* x, int* y, int* z, int* comp,
-			int req_comp)
+		public static void* stbi__load_gif_main(stbi__context s, int32** delays, int32* x, int32* y, int32* z, int32* comp,
+			int32 req_comp)
 		{
 			if (stbi__gif_test(s) != 0)
 			{
-				var layers = 0;
+				int32 layers = 0;
 				uint8* u = null;
 				uint8* _out_ = null;
 				uint8* two_back = null;
 				var g = new stbi__gif();
-				var stride = 0;
+				int32 stride = 0;
 				if (delays != null)
 					*delays = null;
 
@@ -389,13 +389,13 @@ namespace StbImageBeef
 						{
 							_out_ = (uint8*)CRuntime.realloc(_out_, (uint64)(layers * stride));
 							if (delays != null)
-								*delays = (int*)CRuntime.realloc(*delays, (uint64)(sizeof(int) * layers));
+								*delays = (int32*)CRuntime.realloc(*delays, (uint64)(sizeof(int32) * layers));
 						}
 						else
 						{
 							_out_ = (uint8*)stbi__malloc((uint64)(layers * stride));
 							if (delays != null)
-								*delays = (int*)stbi__malloc((uint64)(layers * sizeof(int)));
+								*delays = (int32*)stbi__malloc((uint64)(layers * sizeof(int32)));
 						}
 
 						CRuntime.memcpy(_out_ + (layers - 1) * stride, u, (uint64)stride);
@@ -418,7 +418,7 @@ namespace StbImageBeef
 			return (uint8*)(stbi__err("not GIF") != 0 ? (uint8*)null : null);
 		}
 
-		public static void* stbi__gif_load(stbi__context s, int* x, int* y, int* comp, int req_comp,
+		public static void* stbi__gif_load(stbi__context s, int32* x, int32* y, int32* comp, int32 req_comp,
 			stbi__result_info* ri)
 		{
 			uint8* u = null;
@@ -442,7 +442,7 @@ namespace StbImageBeef
 			return u;
 		}
 
-		public static int stbi__gif_info(stbi__context s, int* x, int* y, int* comp)
+		public static int32 stbi__gif_info(stbi__context s, int32* x, int32* y, int32* comp)
 		{
 			return stbi__gif_info_raw(s, x, y, comp);
 		}

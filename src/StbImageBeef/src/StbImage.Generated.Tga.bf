@@ -4,7 +4,7 @@ namespace StbImageBeef
 {
 	extension StbImage
 	{
-		public static int stbi__tga_get_comp(int bits_per_pixel, int is_grey, int* is_rgb16)
+		public static int32 stbi__tga_get_comp(int32 bits_per_pixel, int32 is_grey, int32* is_rgb16)
 		{
 			if (is_rgb16 != null)
 				*is_rgb16 = 0;
@@ -27,16 +27,16 @@ namespace StbImageBeef
 			return 0;
 		}
 
-		public static int stbi__tga_info(stbi__context s, int* x, int* y, int* comp)
+		public static int32 stbi__tga_info(stbi__context s, int32* x, int32* y, int32* comp)
 		{
-			var tga_w = 0;
-			var tga_h = 0;
-			var tga_comp = 0;
-			var tga_image_type = 0;
-			var tga_bits_per_pixel = 0;
-			var tga_colormap_bpp = 0;
-			var sz = 0;
-			var tga_colormap_type = 0;
+			int32 tga_w = 0;
+			int32 tga_h = 0;
+			int32 tga_comp = 0;
+			int32 tga_image_type = 0;
+			int32 tga_bits_per_pixel = 0;
+			int32 tga_colormap_bpp = 0;
+			int32 sz = 0;
+			int32 tga_colormap_type = 0;
 			stbi__get8(s);
 			tga_colormap_type = stbi__get8(s);
 			if (tga_colormap_type > 1)
@@ -124,11 +124,11 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int stbi__tga_test(stbi__context s)
+		public static int32 stbi__tga_test(stbi__context s)
 		{
-			var res = 0;
-			var sz = 0;
-			var tga_color_type = 0;
+			int32 res = 0;
+			int32 sz = 0;
+			int32 tga_color_type = 0;
 			stbi__get8(s);
 			tga_color_type = stbi__get8(s);
 			repeat
@@ -182,34 +182,34 @@ namespace StbImageBeef
 			_out_[2] = (uint8)(b * 255 / 31);
 		}
 
-		public static void* stbi__tga_load(stbi__context s, int* x, int* y, int* comp, int req_comp,
+		public static void* stbi__tga_load(stbi__context s, int32* x, int32* y, int32* comp, int32 req_comp,
 			stbi__result_info* ri)
 		{
-			var tga_offset = (int)stbi__get8(s);
-			var tga_indexed = (int)stbi__get8(s);
-			var tga_image_type = (int)stbi__get8(s);
-			var tga_is_RLE = 0;
+			var tga_offset = (int32)stbi__get8(s);
+			var tga_indexed = (int32)stbi__get8(s);
+			var tga_image_type = (int32)stbi__get8(s);
+			int32 tga_is_RLE = 0;
 			var tga_palette_start = stbi__get16le(s);
 			var tga_palette_len = stbi__get16le(s);
-			var tga_palette_bits = (int)stbi__get8(s);
+			var tga_palette_bits = (int32)stbi__get8(s);
 			var tga_x_origin = stbi__get16le(s);
 			var tga_y_origin = stbi__get16le(s);
 			var tga_width = stbi__get16le(s);
 			var tga_height = stbi__get16le(s);
-			var tga_bits_per_pixel = (int)stbi__get8(s);
-			var tga_comp = 0;
-			var tga_rgb16 = 0;
-			var tga_inverted = (int)stbi__get8(s);
+			var tga_bits_per_pixel = (int32)stbi__get8(s);
+			int32 tga_comp = 0;
+			int32 tga_rgb16 = 0;
+			var tga_inverted = (int32)stbi__get8(s);
 			uint8* tga_data;
 			uint8* tga_palette = null;
-			var i = 0;
-			var j = 0;
+			int32 i = 0;
+			int32 j = 0;
 			var raw_data = scope uint8[4];
 			raw_data[0] = 0;
 
-			var RLE_count = 0;
-			var RLE_repeating = 0;
-			var read_next_pixel = 1;
+			int32 RLE_count = 0;
+			int32 RLE_repeating = 0;
+			int32 read_next_pixel = 1;
 			if (tga_image_type >= 8)
 			{
 				tga_image_type -= 8;
@@ -277,7 +277,7 @@ namespace StbImageBeef
 					{
 						if (RLE_count == 0)
 						{
-							var RLE_cmd = (int)stbi__get8(s);
+							var RLE_cmd = (int32)stbi__get8(s);
 							RLE_count = 1 + (RLE_cmd & 127);
 							RLE_repeating = RLE_cmd >> 7;
 							read_next_pixel = 1;
@@ -296,7 +296,7 @@ namespace StbImageBeef
 					{
 						if (tga_indexed != 0)
 						{
-							int pal_idx = tga_bits_per_pixel == 8 ? stbi__get8(s) : stbi__get16le(s);
+							int32 pal_idx = tga_bits_per_pixel == 8 ? stbi__get8(s) : stbi__get16le(s);
 							if (pal_idx >= tga_palette_len)
 								pal_idx = 0;
 							pal_idx *= tga_comp;

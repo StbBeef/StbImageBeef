@@ -54,7 +54,7 @@ namespace StbImageBeef
 		public static int32 stbi__create_png_image_raw(stbi__png a, uint8* raw, int32 raw_len, int32 out_n, int32 x, int32 y, int32 depth, int32 color)
 		{
 			uint8* rawLocal = raw;
-			var uint8s = depth == 16 ? 2 : 1;
+			int32 uint8s = depth == 16 ? 2 : 1;
 			var s = a.s;
 			int32 i = 0;
 			int32 j = 0;
@@ -356,7 +356,7 @@ namespace StbImageBeef
 			uint8* image_data_local = image_data;
 			int32 image_data_len_local = image_data_len;
 
-			var uint8s = depth == 16 ? 2 : 1;
+			int32 uint8s = depth == 16 ? 2 : 1;
 			var out_uint8s = out_n * uint8s;
 			uint8* final;
 			int32 p = 0;

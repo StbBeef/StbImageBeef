@@ -349,8 +349,8 @@ namespace StbImageBeef
 
 			while (k < 4)
 				header[k++] = stbi__zget8(a);
-			len = header[1] * 256 + header[0];
-			nlen = header[3] * 256 + header[2];
+			len = (int32)(header[1] * 256 + header[0]);
+			nlen = (int32)(header[3] * 256 + header[2]);
 			if (nlen != (len ^ 0xffff))
 				return stbi__err("zlib corrupt");
 			if (a.zbuffer + len > a.zbuffer_end)

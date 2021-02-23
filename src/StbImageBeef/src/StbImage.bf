@@ -70,7 +70,7 @@ namespace StbImageBeef
 			public function void (uint8* output, int32 out_stride, int16* data) idct_block_kernel;
 
 			// definition of jpeg image component
-			public img_comp[] img_comp = new img_comp[4];
+			public img_comp[4] img_comp;
 
 			// sizes for components, interleaved MCUs
 			public int32 img_h_max, img_v_max;
@@ -98,6 +98,8 @@ namespace StbImageBeef
 
 			public this()
 			{
+				img_comp[0].x = 0;
+
 				fast_ac = new int16[4][];
 				for (int32 i = 0; i < fast_ac.Count; ++i)
 					fast_ac[i] = new int16[1 << STBI__ZFAST_BITS];

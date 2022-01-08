@@ -3,9 +3,3 @@ Projects = {BeefTest2 = {Path = "tests/StbImageBeef.Testing"}, StbImageBeef = {P
 
 [Workspace]
 StartupProject = "StbImageBeef.Testing"
-
-[Configs.Test.Win32]
-ConfigSelections = {"StbImageBeef.Testing" = {Config = "Debug"}}
-
-[Configs.Test.Win64]
-ConfigSelections = {"StbImageBeef.Testing" = {Config = "Debug"}}

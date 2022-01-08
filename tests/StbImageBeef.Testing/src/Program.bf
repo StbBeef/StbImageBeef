@@ -10,7 +10,7 @@ namespace StbImageBeef
 			ImageResult image;
 			FileStream stream = new .();
 
-			stream.Open(@"C:\Projects\TestImages\BasicSample.jpg", .Read, .None);
+			stream.Open(@"D:\Projects\Hebron\TestImages\BasicSample.jpg", .Read, .None);
 
 			image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 

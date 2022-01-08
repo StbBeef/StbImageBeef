@@ -1,17 +1,18 @@
 using System.Threading;
 
-namespace StbImageBeef
+namespace Hebron.Runtime
 {
-#if !STBSHARP_INTERNAL
-	public
-#else
-	internal
-#endif
 	static class MemoryStats
 	{
 		private static int32 _allocations;
-
-		public static int32 Allocations => _allocations;
+		 
+		public static int32 Allocations
+		{
+			get
+			{
+				return _allocations;
+			}
+		}
 
 		public static void Allocated()
 		{

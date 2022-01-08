@@ -1,6 +1,6 @@
 using System;
 
-namespace StbImageBeef
+namespace Hebron.Runtime
 {
 	static class CRuntime
 	{
@@ -100,6 +100,11 @@ namespace StbImageBeef
 		{
 			for (int32 i = 0; i < data.Count; ++i)
 				data[i] = value;
+		}
+
+		public static float pow(float a, float b)
+		{
+			return Math.Pow(a, b);
 		}
 	}
 }

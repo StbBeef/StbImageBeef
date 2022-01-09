@@ -1,32 +1,16 @@
 # StbImageBeef
 [![Chat](https://img.shields.io/discord/628186029488340992.svg)](https://discord.gg/ZeHxhCY)
 
-StbImageBeef is C# port of the stb_image.h, which is C library to load images in JPG, PNG, BMP, TGA, PSD, GIF and HDR formats.
+StbImageBeef is Beef port of the stb_image.h, which is C library to load images in JPG, PNG, BMP, TGA, PSD, GIF and HDR formats.
 
-It is important to note, that this project is **port**(not **wrapper**). Original C code had been ported to C#. Therefore StbImageBeef doesnt require any native binaries.
+It is important to note, that this project is **port**(not **wrapper**). Original C code had been ported to Beef. Therefore StbImageBeef doesnt require any native binaries.
 
-The porting hasn't been done by hand, but using [Sichem](https://github.com/rds1983/Sichem), which is the C to C# code converter utility.
-    
 # Usage
-StbImageBeef exposes API similar to stb_image.h. However that API is complicated and deals with raw unsafe pointers.
-
-Thus several utility classes had been made to wrap that functionality.
-
-'ImageResult.FromStream' loads an image from stream:
-```c# 
-  using(var stream = File.OpenRead(path))
-  {
-    ImageResult image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
-  }
+```c#
+    FileStream fs = scope FileStream();
+    fs.Open(path, .Open, .Read);
+    ImageResult image = ImageResult.FromStream(fs, ColorComponents.RedGreenBlueAlpha);
 ```
-
-'ImageResult.FromMemory' loads an image from byte array:
-```c# 
-  byte[] buffer = File.ReadAllBytes(path);
-  ImageResult image = ImageResult.FromMemory(buffer, ColorComponents.RedGreenBlueAlpha);
-```
-
-Both code samples will try to load an image (JPG/PNG/BMP/TGA/PSD/GIF) located at 'path'.
 
 ## ImageInfo
 ImageInfo class could be used to obtain an image info like this:
@@ -36,11 +20,9 @@ ImageInfo class could be used to obtain an image info like this:
 It'll return null if the image type isnt supported, otherwise it'll return the image info(width, height, color components, etc).
 
 # Reliability & Performance
-There is special app to measure reliability & performance of StbImageBeef in comparison to the original stb_image.h: https://github.com/StbBeef/StbImageBeef/tree/master/tests/StbImageBeef.Testing
+There is special app to measure reliability & performance of StbImageBeef in comparison to the original stb_image.h: https://github.com/StbBeef/StbImageBeef/tree/master/samples/StbImageBeef.Testing
 
-It goes through every image file in the specified folder and tries to load it 10 times with StbImageBeef, then 10 times with C++/CLI wrapper over the original stb_image.h(Stb.Native). Then it compares whether the results are byte-wise similar and also calculates loading times. Also it sums up and reports loading times for each method.
-
-Moreover SixLabor ImageBeef 1.0.4 is included in the testing too.
+It goes through every image file in the specified folder and tries to load it 10 times with StbImageBeef, then 10 times with native wrapper over the original stb_image.h(Stb.Native). Then it compares whether the results are byte-wise similar and also calculates loading times. Also it sums up and reports loading times for each method.
 
 I've used it over following set of images: https://github.com/StbBeef/TestImages
 

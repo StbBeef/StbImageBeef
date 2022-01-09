@@ -6,4 +6,4 @@ Name = "StbImageBeef.Testing"
 StartupObject = "StbImageBeef.Testing.Program"
 
 [Configs.Debug.Win64]
-DebugCommandArguments = "D:\\Projects\\Hebron\\TestImages2"
+DebugCommandArguments = "D:\\Projects\\Hebron\\TestImages"

@@ -170,15 +170,15 @@ namespace StbImageBeef.Testing
 		{
 			var files = Directory.EnumerateFiles(imagesPath, "*.*");
 
-/*			var threads = new List<Thread>();
+			var threads = new List<Thread>();
 			foreach (var file in files)
 			{
-				var path = scope String();
+				var path = new String();
 				file.GetFilePath(path);
 
 				Thread thread = new .(new => ThreadProc);
 				threads.Add(thread);
-				thread.Start(file, false);
+				thread.Start(path, false);
 
 				Interlocked.Increment(ref tasksStarted);
 			}
@@ -194,7 +194,7 @@ namespace StbImageBeef.Testing
 			foreach(var thread in threads)
 			{
 				delete thread;
-			}*/
+			}
 
 			return true;
 		}
@@ -284,6 +284,8 @@ namespace StbImageBeef.Testing
 			} else {
 				Log($"Error: {err}");
 			}
+
+			delete f;
 
 			Interlocked.Increment(ref filesProcessed);
 			Interlocked.Decrement(ref tasksStarted);

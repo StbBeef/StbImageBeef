@@ -1525,9 +1525,9 @@ namespace StbImageBeef
 			j.resample_row_hv_2_kernel = => stbi__resample_row_hv_2;
 		}
 
-		public static void stbi__YCbCr_to_RGB_row(uint8* _out_, uint8* y, uint8* pcb, uint8* pcr, int32 count, int32 step)
+		public static void stbi__YCbCr_to_RGB_row(uint8* outInput, uint8* y, uint8* pcb, uint8* pcr, int32 count, int32 step)
 		{
-			uint8* outLocal = _out_;
+			uint8* _out_ = outInput;
 			int32 i = 0;
 			for (i = 0; i < count; ++i)
 			{
@@ -1568,11 +1568,11 @@ namespace StbImageBeef
 						b = 255;
 				}
 
-				outLocal[0] = (uint8)r;
-				outLocal[1] = (uint8)g;
-				outLocal[2] = (uint8)b;
-				outLocal[3] = 255;
-				outLocal += step;
+				_out_[0] = (uint8)r;
+				_out_[1] = (uint8)g;
+				_out_[2] = (uint8)b;
+				_out_[3] = 255;
+				_out_ += step;
 			}
 		}
 

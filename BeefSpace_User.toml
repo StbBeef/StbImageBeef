@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["src\\StbImageBeef\\src\\ImageResult.bf", "samples\\StbImageBeef.Testing\\src\\Program.bf", "Disassembly", "src\\StbImageBeef\\src\\StbImage.Generated.Common.bf", "src\\StbImageBeef\\src\\Hebron.Runtime\\CRuntime.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Psd.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Tga.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Png.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Zlib.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Jpg.bf", "src\\StbImageBeef\\src\\Hebron.Runtime\\MemoryStats.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Bmp.bf", "src\\StbImageBeef\\src\\StbImage.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Array.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\String.bf", "Disassembly", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\File.bf", "tests\\StbImageBeef.Testing\\src\\Program.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\FileStream.bf"]
+RecentFilesList = ["c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\String.bf", "d:\\a01\\_work\\6\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm", "samples\\StbImageBeef.Testing\\src\\Program.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\Directory.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Threading\\ThreadPool.bf", "Disassembly", "src\\StbImageBeef\\src\\StbImage.Generated.Psd.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Png.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Jpg.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Common.bf", "src\\StbImageBeef\\src\\ImageResult.bf", "src\\StbImageBeef\\src\\StbImage.bf", "src\\StbImageBeef\\src\\Hebron.Runtime\\CRuntime.bf", "src\\StbImageBeef\\src\\MyMemoryStream.bf", "Disassembly", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\File.bf", "tests\\StbImageBeef.Testing\\src\\Program.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\FileStream.bf"]
 
 [MainWindow]
 X = 487
@@ -42,29 +42,46 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-Active = true
-TabLabel = "ImageResult.bf"
-TabWidth = 126.0
+TabLabel = "Directory.bf"
+TabWidth = 108.0
 Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\ImageResult.bf"
-CursorPos = 1521
-VertPos = 615.0
+FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\Directory.bf"
+CursorPos = 4442
+VertPos = 1905.0
+ProjectName = "corlib"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "String.bf"
+TabWidth = 89.0
+Type = "SourceViewPanel"
+FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\String.bf"
+CursorPos = 16927
+VertPos = 10095.0
+ProjectName = "corlib"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "memset.asm"
+TabWidth = 113.0
+Type = "SourceViewPanel"
+FilePath = "d:\\a01\\_work\\6\\s\\src\\vctools\\crt\\vcruntime\\src\\string\\amd64\\memset.asm"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Png.bf"
+TabWidth = 199.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Png.bf"
+CursorPos = 9986
+VertPos = 4980.0
 ProjectName = "StbImageBeef"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "StbImage.Generated.Psd.bf"
+TabLabel = "StbImage.Generated.Jpg.bf"
 TabWidth = 198.0
 Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Psd.bf"
-CursorPos = 400
-ProjectName = "StbImageBeef"
-
-[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "MemoryStats.bf"
-TabWidth = 132.0
-Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\Hebron.Runtime\\MemoryStats.bf"
-CursorPos = 379
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Jpg.bf"
+CursorPos = 39136
+VertPos = 22980.0
 ProjectName = "StbImageBeef"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -72,33 +89,17 @@ TabLabel = "StbImage.Generated.Common.bf"
 TabWidth = 230.0
 Type = "SourceViewPanel"
 FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Common.bf"
-CursorPos = 6903
-VertPos = 2805.0
+CursorPos = 16901
+VertPos = 9075.0
 ProjectName = "StbImageBeef"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "StbImage.Generated.Tga.bf"
+TabLabel = "StbImage.Generated.Psd.bf"
 TabWidth = 198.0
 Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Tga.bf"
-CursorPos = 7457
-VertPos = 4110.0
-ProjectName = "StbImageBeef"
-
-[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "StbImage.Generated.Bmp.bf"
-TabWidth = 203.0
-Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Bmp.bf"
-CursorPos = 17
-ProjectName = "StbImageBeef"
-
-[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "StbImage.Generated.Zlib.bf"
-TabWidth = 198.0
-Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Zlib.bf"
-CursorPos = 17
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Psd.bf"
+CursorPos = 1303
+VertPos = 360.0
 ProjectName = "StbImageBeef"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -106,53 +107,17 @@ TabLabel = "StbImage.bf"
 TabWidth = 110.0
 Type = "SourceViewPanel"
 FilePath = "src\\StbImageBeef\\src\\StbImage.bf"
-CursorPos = 599
-VertPos = 45.0
+CursorPos = 622
+VertPos = 110.0
 ProjectName = "StbImageBeef"
-
-[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "Array.bf"
-TabWidth = 86.0
-Type = "SourceViewPanel"
-FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Array.bf"
-CursorPos = 6481
-VertPos = 3300.0
-ProjectName = "corlib"
-
-[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "StbImage.Generated.Jpg.bf"
-TabWidth = 198.0
-Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Jpg.bf"
-CursorPos = 32071
-VertPos = 19695.0
-ProjectName = "StbImageBeef"
-
-[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "StbImage.Generated.Png.bf"
-TabWidth = 199.0
-Type = "SourceViewPanel"
-FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Png.bf"
-CursorPos = 21427
-VertPos = 11190.0
-ProjectName = "StbImageBeef"
-
-[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-TabLabel = "String.bf"
-TabWidth = 89.0
-Type = "SourceViewPanel"
-FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\String.bf"
-CursorPos = 21073
-VertPos = 12570.0
-ProjectName = "corlib"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "CRuntime.bf"
 TabWidth = 110.0
 Type = "SourceViewPanel"
 FilePath = "src\\StbImageBeef\\src\\Hebron.Runtime\\CRuntime.bf"
-CursorPos = 285
-VertPos = 45.0
+CursorPos = 1108
+VertPos = 225.0
 ProjectName = "StbImageBeef"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -162,12 +127,29 @@ Type = "DisassemblyPanel"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Program.bf"
-TabWidth = 96.0
+TabWidth = 106.0
 Type = "SourceViewPanel"
 FilePath = "samples\\StbImageBeef.Testing\\src\\Program.bf"
-CursorPos = 4056
-VertPos = 2205.0
+CursorPos = 3801
+VertPos = 2085.0
 ProjectName = "StbImageBeef.Testing"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "ImageResult.bf"
+TabWidth = 126.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\ImageResult.bf"
+CursorPos = 1127
+VertPos = 450.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "MyMemoryStream.bf"
+TabWidth = 163.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\MyMemoryStream.bf"
+CursorPos = 528
+ProjectName = "StbImageBeef"
 
 [[MainDockingFrame.DockedWidgets]]
 RequestedWidth = 250.0
@@ -189,14 +171,14 @@ AutoResize = "Auto_Mul8"
 RequestedWidth = 300.0
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "Watch"
 TabWidth = 86.0
 Type = "WatchPanel"
 Columns = [{Width = 200.0}, {Width = 200.0}, {Width = 200.0}]
-Items = ["orig[i]", "n", "0xffffffff / 2", "limit", "(int64)val", ""]
+Items = ["orig[i]", "n", "0xffffffff / 2", "limit", "(int64)val", "MemoryStats.Allocations", ""]
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "Auto"
 TabWidth = 77.0
 Type = "AutoWatchPanel"
@@ -237,4 +219,14 @@ Type = "OutputPanel"
 [[Breakpoints]]
 File = "tests\\StbImageBeef.Testing\\src\\Program.bf"
 Line = 16
+Column = 3
+
+[[Breakpoints]]
+File = "samples\\StbImageBeef.Testing\\src\\Program.bf"
+Line = 203
+Column = 3
+
+[[Breakpoints]]
+File = "samples\\StbImageBeef.Testing\\src\\Program.bf"
+Line = 170
 Column = 3

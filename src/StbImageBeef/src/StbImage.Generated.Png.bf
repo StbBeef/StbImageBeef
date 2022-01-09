@@ -159,10 +159,10 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int32 stbi__create_png_image_raw(stbi__png a, uint8* raw, uint32 raw_len, int32 out_n, int32 x, int32 y,
+		public static int32 stbi__create_png_image_raw(stbi__png a, uint8* rawInput, uint32 raw_len, int32 out_n, int32 x, int32 y,
 			int32 depth, int32 color)
 		{
-			uint8* rawLocal = raw;
+			uint8* raw = rawInput;
 			int32 uint8s = depth == 16 ? 2 : 1;
 			var s = a.s;
 			int32 i = 0;
@@ -188,7 +188,7 @@ namespace StbImageBeef
 			{
 				var cur = a._out_ + stride * j;
 				uint8* prior;
-				int32 filter = *rawLocal++;
+				int32 filter = *raw++;
 				if (filter > 4)
 					return stbi__err("invalid filter");
 				if (depth < 8)
@@ -207,25 +207,25 @@ namespace StbImageBeef
 					switch (filter)
 					{
 						case STBI__F_none:
-							cur[k] = rawLocal[k];
+							cur[k] = raw[k];
 							break;
 						case STBI__F_sub:
-							cur[k] = rawLocal[k];
+							cur[k] = raw[k];
 							break;
 						case STBI__F_up:
-							cur[k] = (uint8)(((int32)rawLocal[k] + prior[k]) & 255);
+							cur[k] = (uint8)(((int32)raw[k] + prior[k]) & 255);
 							break;
 						case STBI__F_avg:
-							cur[k] = (uint8)(((int32)rawLocal[k] + (prior[k] >> 1)) & 255);
+							cur[k] = (uint8)(((int32)raw[k] + (prior[k] >> 1)) & 255);
 							break;
 						case STBI__F_paeth:
-							cur[k] = (uint8)(((int32)rawLocal[k] + stbi__paeth(0, prior[k], 0)) & 255);
+							cur[k] = (uint8)(((int32)raw[k] + stbi__paeth(0, prior[k], 0)) & 255);
 							break;
 						case STBI__F_avg_first:
-							cur[k] = rawLocal[k];
+							cur[k] = raw[k];
 							break;
 						case STBI__F_paeth_first:
-							cur[k] = rawLocal[k];
+							cur[k] = raw[k];
 							break;
 					}
 
@@ -233,7 +233,7 @@ namespace StbImageBeef
 				{
 					if (img_n != out_n)
 						cur[img_n] = 255;
-					rawLocal += img_n;
+					raw += img_n;
 					cur += out_n;
 					prior += out_n;
 				}
@@ -245,13 +245,13 @@ namespace StbImageBeef
 						cur[filter_uint8s + 1] = 255;
 					}
 
-					rawLocal += filter_uint8s;
+					raw += filter_uint8s;
 					cur += output_uint8s;
 					prior += output_uint8s;
 				}
 				else
 				{
-					rawLocal += 1;
+					raw += 1;
 					cur += 1;
 					prior += 1;
 				}
@@ -262,39 +262,39 @@ namespace StbImageBeef
 					switch (filter)
 					{
 						case STBI__F_none:
-							CRuntime.memcpy(cur, rawLocal, (uint64)nk);
+							CRuntime.memcpy(cur, raw, (uint64)nk);
 							break;
 						case STBI__F_sub:
-							for (k = 0; k < nk; ++k) cur[k] = (uint8)(((int32)rawLocal[k] + cur[k - filter_uint8s]) & 255);
+							for (k = 0; k < nk; ++k) cur[k] = (uint8)(((int32)raw[k] + cur[k - filter_uint8s]) & 255);
 
 							break;
 						case STBI__F_up:
-							for (k = 0; k < nk; ++k) cur[k] = (uint8)(((int32)rawLocal[k] + prior[k]) & 255);
+							for (k = 0; k < nk; ++k) cur[k] = (uint8)(((int32)raw[k] + prior[k]) & 255);
 
 							break;
 						case STBI__F_avg:
 							for (k = 0; k < nk; ++k)
-								cur[k] = (uint8)((rawLocal[k] + (((int32)prior[k] + cur[k - filter_uint8s]) >> 1)) & 255);
+								cur[k] = (uint8)((raw[k] + (((int32)prior[k] + cur[k - filter_uint8s]) >> 1)) & 255);
 
 							break;
 						case STBI__F_paeth:
 							for (k = 0; k < nk; ++k)
-								cur[k] = (uint8)(((int32)rawLocal[k] + stbi__paeth(cur[k - filter_uint8s], prior[k],
+								cur[k] = (uint8)(((int32)raw[k] + stbi__paeth(cur[k - filter_uint8s], prior[k],
 									prior[k - filter_uint8s])) & 255);
 
 							break;
 						case STBI__F_avg_first:
-							for (k = 0; k < nk; ++k) cur[k] = (uint8)(((int32)rawLocal[k] + (cur[k - filter_uint8s] >> 1)) & 255);
+							for (k = 0; k < nk; ++k) cur[k] = (uint8)(((int32)raw[k] + (cur[k - filter_uint8s] >> 1)) & 255);
 
 							break;
 						case STBI__F_paeth_first:
 							for (k = 0; k < nk; ++k)
-								cur[k] = (uint8)(((int32)rawLocal[k] + stbi__paeth(cur[k - filter_uint8s], 0, 0)) & 255);
+								cur[k] = (uint8)(((int32)raw[k] + stbi__paeth(cur[k - filter_uint8s], 0, 0)) & 255);
 
 							break;
 					}
 
-					rawLocal += nk;
+					raw += nk;
 				}
 				else
 				{
@@ -303,67 +303,67 @@ namespace StbImageBeef
 						case STBI__F_none:
 							for (i = x - 1;
 								i >= 1;
-								--i, cur[filter_uint8s] = 255, rawLocal += filter_uint8s, cur += output_uint8s, prior +=
+								--i, cur[filter_uint8s] = 255, raw += filter_uint8s, cur += output_uint8s, prior +=
 									output_uint8s)
 								for (k = 0; k < filter_uint8s; ++k)
-									cur[k] = rawLocal[k];
+									cur[k] = raw[k];
 
 							break;
 						case STBI__F_sub:
 							for (i = x - 1;
 								i >= 1;
-								--i, cur[filter_uint8s] = 255, rawLocal += filter_uint8s, cur += output_uint8s, prior +=
+								--i, cur[filter_uint8s] = 255, raw += filter_uint8s, cur += output_uint8s, prior +=
 									output_uint8s)
 								for (k = 0; k < filter_uint8s; ++k)
-									cur[k] = (uint8)(((int32)rawLocal[k] + cur[k - output_uint8s]) & 255);
+									cur[k] = (uint8)(((int32)raw[k] + cur[k - output_uint8s]) & 255);
 
 							break;
 						case STBI__F_up:
 							for (i = x - 1;
 								i >= 1;
-								--i, cur[filter_uint8s] = 255, rawLocal += filter_uint8s, cur += output_uint8s, prior +=
+								--i, cur[filter_uint8s] = 255, raw += filter_uint8s, cur += output_uint8s, prior +=
 									output_uint8s)
 								for (k = 0; k < filter_uint8s; ++k)
-									cur[k] = (uint8)(((int32)rawLocal[k] + prior[k]) & 255);
+									cur[k] = (uint8)(((int32)raw[k] + prior[k]) & 255);
 
 							break;
 						case STBI__F_avg:
 							for (i = x - 1;
 								i >= 1;
-								--i, cur[filter_uint8s] = 255, rawLocal += filter_uint8s, cur += output_uint8s, prior +=
+								--i, cur[filter_uint8s] = 255, raw += filter_uint8s, cur += output_uint8s, prior +=
 									output_uint8s)
 								for (k = 0; k < filter_uint8s; ++k)
 								{
-									cur[k] = (uint8)((rawLocal[k] + (((int32)prior[k] + cur[k - output_uint8s]) >> 1)) & 255);
+									cur[k] = (uint8)((raw[k] + (((int32)prior[k] + cur[k - output_uint8s]) >> 1)) & 255);
 								}
 	
 							break;
 						case STBI__F_paeth:
 							for (i = x - 1;
 								i >= 1;
-								--i, cur[filter_uint8s] = 255, rawLocal += filter_uint8s, cur += output_uint8s, prior +=
+								--i, cur[filter_uint8s] = 255, raw += filter_uint8s, cur += output_uint8s, prior +=
 									output_uint8s)
 								for (k = 0; k < filter_uint8s; ++k)
-									cur[k] = (uint8)((rawLocal[k] + stbi__paeth(cur[k - output_uint8s], prior[k],
+									cur[k] = (uint8)((raw[k] + stbi__paeth(cur[k - output_uint8s], prior[k],
 										prior[k - output_uint8s])) & 255);
 
 							break;
 						case STBI__F_avg_first:
 							for (i = x - 1;
 								i >= 1;
-								--i, cur[filter_uint8s] = 255, rawLocal += filter_uint8s, cur += output_uint8s, prior +=
+								--i, cur[filter_uint8s] = 255, raw += filter_uint8s, cur += output_uint8s, prior +=
 									output_uint8s)
 								for (k = 0; k < filter_uint8s; ++k)
-									cur[k] = (uint8)(((int32)rawLocal[k] + (cur[k - output_uint8s] >> 1)) & 255);
+									cur[k] = (uint8)(((int32)raw[k] + (cur[k - output_uint8s] >> 1)) & 255);
 
 							break;
 						case STBI__F_paeth_first:
 							for (i = x - 1;
 								i >= 1;
-								--i, cur[filter_uint8s] = 255, rawLocal += filter_uint8s, cur += output_uint8s, prior +=
+								--i, cur[filter_uint8s] = 255, raw += filter_uint8s, cur += output_uint8s, prior +=
 									output_uint8s)
 								for (k = 0; k < filter_uint8s; ++k)
-									cur[k] = (uint8)(((int32)rawLocal[k] + stbi__paeth(cur[k - output_uint8s], 0, 0)) & 255);
+									cur[k] = (uint8)(((int32)raw[k] + stbi__paeth(cur[k - output_uint8s], 0, 0)) & 255);
 
 							break;
 					}

@@ -11,40 +11,80 @@ namespace StbImageBeef.Testing
 {
 	static class Program
 	{
-		private struct LoadResult
+		private abstract class LoadResult
 		{
-			public this(int width, int height, ColorComponents components, uint8* data, int timeInMs)
+			public uint8* Data;
+			public int32 Width;
+			public int32 Height;
+			public ColorComponents Components;
+			public int TimeInMs;
+
+			public abstract void Load(List<uint8> dataList);
+		}
+
+		private class StbImageBeefResult: LoadResult
+		{
+			public ~this()
 			{
-				Width = width;
-				Height = height;
-				Components = components;
-				Data = data;
-				TimeInMs = timeInMs;
+				if (Data != null)
+				{
+					CRuntime.free(Data);
+					Data = null;
+				}
 			}
 
-			public int Width;
-			public int Height;
-			public ColorComponents Components;
-			public uint8* Data;
-			public int TimeInMs;
+			public override void Load(List<uint8> dataList)
+			{
+
+				Data = ImageResult.RawFromMemory(dataList, ColorComponents.RedGreenBlueAlpha, out Width, out Height, out Components);
+
+			}
+		}
+
+		private class StbNativeResult: LoadResult
+		{
+			public ~this()
+			{
+				if (Data != null)
+				{
+					Internal.StdFree(Data);
+					Data = null;
+				}
+			}
+
+			public override void Load(List<uint8> dataList)
+			{
+				int32 width = 0, height = 0;
+				int32 icomp = 0;
+				Data = StbNative.stbi_load_from_memory(dataList.Ptr, (int32)dataList.Count, &width, &height, &icomp, (int)ColorComponents.RedGreenBlueAlpha);
+				Width = width;
+				Height = height;
+				Components = (ColorComponents)icomp;
+			}
 		}
 
 		private class LoadingTimes
 		{
-			private readonly Dictionary<StringView, int> _byExtension = new Dictionary<StringView, int>();
-			private readonly Dictionary<StringView, int> _byExtensionCount = new Dictionary<StringView, int>();
+			private readonly Dictionary<String, int> _byExtension = new Dictionary<String, int>();
+			private readonly Dictionary<String, int> _byExtensionCount = new Dictionary<String, int>();
 			private int _total, _totalCount;
 
-			public void Add(StringView ext, int value)
+			public void Add(String ext, int value)
 			{
-				if (!_byExtension.ContainsKey(ext))
-				{
-					_byExtension[ext] = 0;
-					_byExtensionCount[ext] = 0;
+				var key = new String(ext);
+
+				String matchKey;
+				int matchValue;
+				if (!_byExtension.TryGet(key, out matchKey, out matchValue)) {
+					_byExtension[key] = 0;
+					_byExtensionCount[key] = 0;
+				} else {
+					delete key;
+					key = matchKey;
 				}
 
-				_byExtension[ext] += value;
-				++_byExtensionCount[ext];
+				_byExtension[key] += value;
+				++_byExtensionCount[key];
 				_total += value;
 				++_totalCount;
 			}
@@ -100,44 +140,68 @@ namespace StbImageBeef.Testing
 			return (int)sw.ElapsedMilliseconds;
 		}
 
-		private static LoadResult ParseTest(String name, LoadDelegate load)
+		private static T ParseTest<T>(String name, List<uint8> dataList) where T: LoadResult, new, delete
 		{
 			var sw = scope Stopwatch();
 
 			Log($"With ${name}");
-			int32 x = 0, y = 0;
-			var comp = ColorComponents.Grey;
-			uint8 *parsed = null;
 			BeginWatch(sw);
 
-			for (var i = 0; i < LoadTries; ++i)
-				parsed = load(out x, out y, out comp);
+			T result = null;
+			for (var i = 0; i < LoadTries; ++i) {
+				result = new T();
+				result.Load(dataList);
+				if (i < LoadTries - 1) {
+					delete result;
+				}
+			}
 
-			var size = x * y * 4;
-			Log($"x: {x}, y: {y}, comp: {comp}, size: {size}");
-			var passed = EndWatch(sw) / LoadTries;
+			var size = result.Width * result.Height * 4;
+			Log($"x: {result.Width}, y: {result.Height}, comp: {result.Components}, size: {size}");
+			var passed = (int32)(EndWatch(sw) / LoadTries);
 			Log($"Span: {passed} ms");
 
-			return LoadResult(x, y, comp, parsed, passed);
+			result.TimeInMs = passed;
+
+			return result;
 		}
 
 		public static bool RunTests(String imagesPath)
 		{
 			var files = Directory.EnumerateFiles(imagesPath, "*.*");
 
+/*			var threads = new List<Thread>();
 			foreach (var file in files)
 			{
 				var path = scope String();
 				file.GetFilePath(path);
-				ThreadProc(path);
+
+				Thread thread = new .(new => ThreadProc);
+				threads.Add(thread);
+				thread.Start(file, false);
+
 				Interlocked.Increment(ref tasksStarted);
 			}
+
+			while (true)
+			{
+				Thread.Sleep(1000);
+
+				if (tasksStarted == 0)
+					break;
+			}
+
+			foreach(var thread in threads)
+			{
+				delete thread;
+			}*/
 
 			return true;
 		}
 
-		private static void ThreadProc(String f)
+		private static void ThreadProc(Object obj)
 		{
+			String f = (String)obj;
 			if (!f.EndsWith(".bmp") && !f.EndsWith(".jpg") && !f.EndsWith(".png") &&
 				!f.EndsWith(".jpg") && !f.EndsWith(".psd") && !f.EndsWith(".pic") &&
 				!f.EndsWith(".tga") && !f.EndsWith(".hdr"))
@@ -149,6 +213,9 @@ namespace StbImageBeef.Testing
 			bool match = false;
 			var err = scope String();
 
+			StbImageBeefResult stbImageBeefResult = null;
+			StbNativeResult stbNativeResult = null;
+
 			repeat {
 				Log(String.Empty);
 				var dt = scope String();
@@ -158,66 +225,36 @@ namespace StbImageBeef.Testing
 				var dataList = scope List<uint8>();
 				var result = File.ReadAll(f, dataList);
 
-				var ext =  scope String();
+				var ext = scope String();
 				Path.GetExtension(f, ext);
 				ext.ToLower();
 
 				Log("----------------------------");
 
-				var stbImageSharpResult = ParseTest(
-					"StbImageSharp",
-					scope (x, y, ccomp) =>
-					{
-						var dataListClone = new List<uint8>();
-						dataListClone.AddRange(dataList);
-						var img = ImageResult.FromMemory(dataListClone, ColorComponents.RedGreenBlueAlpha);
+				stbImageBeefResult = ParseTest<StbImageBeefResult>("StbImageSharp", dataList);
+				stbNativeResult = ParseTest<StbNativeResult>("Stb.Native", dataList);
 
-						x = img.Width;
-						y = img.Height;
-						ccomp = img.SourceComp;
-
-						var res = img.Data;
-
-						delete img;
-
-						return res;
-					});
-
-				var stbNativeResult = ParseTest(
-					"Stb.Native",
-					scope (x, y, ccomp) =>
-					{
-						x = y = 0;
-						int32 icomp = 0;
-						var result = StbNative.stbi_load_from_memory(dataList.Ptr, (int32)dataList.Count, &x, &y, &icomp, (int)ColorComponents.RedGreenBlueAlpha);
-						ccomp = (ColorComponents)icomp;
-
-
-						return result;
-					});
-
-
-				if (stbImageSharpResult.Width != stbNativeResult.Width) {
-					err.AppendF($"Inconsistent x: StbSharp={stbImageSharpResult.Width}, Stb.Native={stbNativeResult.Width}");
+				if (stbImageBeefResult.Width != stbNativeResult.Width) {
+					err.AppendF($"Inconsistent x: StbSharp={stbImageBeefResult.Width}, Stb.Native={stbNativeResult.Width}");
 					break;
 				}
 
-				if (stbImageSharpResult.Height != stbNativeResult.Height) {
-					err.AppendF($"Inconsistent height: StbSharp={stbImageSharpResult.Height}, Stb.Native={stbNativeResult.Height}");
+				if (stbImageBeefResult.Height != stbNativeResult.Height) {
+					err.AppendF($"Inconsistent height: StbSharp={stbImageBeefResult.Height}, Stb.Native={stbNativeResult.Height}");
 					break;
 				}
 
-				if (stbImageSharpResult.Components != stbNativeResult.Components) {
-					err.AppendF($"Inconsistent components: StbSharp={stbImageSharpResult.Components}, Stb.Native={stbNativeResult.Components}");
+				if (stbImageBeefResult.Components != stbNativeResult.Components) {
+					err.AppendF($"Inconsistent components: StbSharp={stbImageBeefResult.Components}, Stb.Native={stbNativeResult.Components}");
 					break;
 				}
 
-				var length = stbImageSharpResult.Width * stbImageSharpResult.Height * 4;
+				var length = stbImageBeefResult.Width * stbImageBeefResult.Height * 4;
 
 				var dataMatches = true;
 				for (var i = 0; i < length; ++i) {
-					if (stbImageSharpResult.Data[i] != stbNativeResult.Data[i]) {
-						err.AppendF($"Inconsistent data: index={i}, StbSharp={(int)stbImageSharpResult.Data[i]}, Stb.Native={(int)stbNativeResult.Data[i]}");
+					if (stbImageBeefResult.Data[i] != stbNativeResult.Data[i]) {
+						err.AppendF($"Inconsistent data: index={i}, StbSharp={(int)stbImageBeefResult.Data[i]}, Stb.Native={(int)stbNativeResult.Data[i]}");
 						dataMatches = false;
 						break;
 					}
@@ -229,11 +266,17 @@ namespace StbImageBeef.Testing
 
 				match = true;
 
-				stbImageSharpTotal.Add(ext, stbImageSharpResult.TimeInMs);
+				stbImageSharpTotal.Add(ext, stbImageBeefResult.TimeInMs);
 				stbNativeTotal.Add(ext, stbNativeResult.TimeInMs);
-
-				GC.Collect();
 			} while(false);
+
+			if (stbImageBeefResult != null) {
+				delete stbImageBeefResult;
+			}
+
+			if (stbNativeResult != null) {
+				delete stbNativeResult;
+			}
 
 			if (match)
 			{
@@ -279,8 +322,5 @@ namespace StbImageBeef.Testing
 
 			return res ? 1 : 0;
 		}
-		private delegate void WriteDelegate(ImageResult image, Stream stream);
-
-		private delegate uint8* LoadDelegate(out int32 x, out int32 y, out ColorComponents comp);
 	}
 }

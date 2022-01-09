@@ -6,8 +6,9 @@ namespace StbImageBeef
 {
 	extension StbImage
 	{
-		public static int32 stbi__psd_decode_rle(stbi__context s, ref uint8 p, int32 pixelCount)
+		public static int32 stbi__psd_decode_rle(stbi__context s, uint8 *pInput, int32 pixelCount)
 		{
+			var p = pInput;
 			int32 count = 0;
 			int32 nleft = 0;
 			int32 len = 0;
@@ -26,7 +27,7 @@ namespace StbImageBeef
 					count += len;
 					while (len != 0)
 					{
-						p = stbi__get8(s);
+						*p = stbi__get8(s);
 						p += 4;
 						len--;
 					}
@@ -41,7 +42,7 @@ namespace StbImageBeef
 					count += len;
 					while (len != 0)
 					{
-						p = val;
+						*p = val;
 						p += 4;
 						len--;
 					}
@@ -51,20 +52,20 @@ namespace StbImageBeef
 			return 1;
 		}
 
-		public static int32 stbi__psd_info(stbi__context s, int32* x, int32* y, int32* comp)
+		public static int32 stbi__psd_info(stbi__context s, int32* xInput, int32* yInput, int32* compInput)
 		{
-			int32 *xLocal = x;
-			int32 *yLocal = y;
-			int32 *compLocal = comp;
+			int32 *x = xInput;
+			int32 *y = yInput;
+			int32 *comp = compInput;
 			int32 channelCount = 0;
 			int32 dummy = 0;
 			int32 depth = 0;
-			if (xLocal == null)
-				xLocal = &dummy;
-			if (yLocal == null)
-				yLocal = &dummy;
-			if (compLocal == null)
-				compLocal = &dummy;
+			if (x == null)
+				x = &dummy;
+			if (y == null)
+				y = &dummy;
+			if (comp == null)
+				comp = &dummy;
 			if (stbi__get32be(s) != 0x38425053)
 			{
 				stbi__rewind(s);
@@ -85,8 +86,8 @@ namespace StbImageBeef
 				return 0;
 			}
 
-			*yLocal = (int32)stbi__get32be(s);
-			*xLocal = (int32)stbi__get32be(s);
+			*y = (int32)stbi__get32be(s);
+			*x = (int32)stbi__get32be(s);
 			depth = stbi__get16be(s);
 			if (depth != 8 && depth != 16)
 			{
@@ -100,7 +101,7 @@ namespace StbImageBeef
 				return 0;
 			}
 
-			*compLocal = 4;
+			*comp = 4;
 			return 1;
 		}
 
@@ -203,7 +204,7 @@ namespace StbImageBeef
 					}
 					else
 					{
-						if (stbi__psd_decode_rle(s, ref *p, pixelCount) == 0)
+						if (stbi__psd_decode_rle(s, p, pixelCount) == 0)
 						{
 							CRuntime.free(_out_);
 							return (uint8*)(stbi__err("corrupt") != 0 ? null : null);

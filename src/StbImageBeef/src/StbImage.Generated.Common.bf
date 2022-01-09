@@ -50,25 +50,25 @@ namespace StbImageBeef
 			return stbi__bitreverse16(v) >> (16 - bits);
 		}
 
-		public static int32 stbi__bitcount(uint32 a)
+		public static int32 stbi__bitcount(uint32 aInput)
 		{
-			uint32 aLocal = a;
-			aLocal = (aLocal & 0x55555555) + ((aLocal >> 1) & 0x55555555);
-			aLocal = (aLocal & 0x33333333) + ((aLocal >> 2) & 0x33333333);
-			aLocal = (aLocal + (aLocal >> 4)) & 0x0f0f0f0f;
-			aLocal = aLocal + (aLocal >> 8);
-			aLocal = aLocal + (aLocal >> 16);
-			return (int32)(aLocal & 0xff);
+			uint32 a = aInput;
+			a = (a & 0x55555555) + ((a >> 1) & 0x55555555);
+			a = (a & 0x33333333) + ((a >> 2) & 0x33333333);
+			a = (a + (a >> 4)) & 0x0f0f0f0f;
+			a = a + (a >> 8);
+			a = a + (a >> 16);
+			return (int32)(a & 0xff);
 		}
 
-		public static int32 stbi__bitreverse16(int32 n)
+		public static int32 stbi__bitreverse16(int32 nInput)
 		{
-			int32 nLocal = n;
-			nLocal = ((nLocal & 0xAAAA) >> 1) | ((nLocal & 0x5555) << 1);
-			nLocal = ((nLocal & 0xCCCC) >> 2) | ((nLocal & 0x3333) << 2);
-			nLocal = ((nLocal & 0xF0F0) >> 4) | ((nLocal & 0x0F0F) << 4);
-			nLocal = ((nLocal & 0xFF00) >> 8) | ((nLocal & 0x00FF) << 8);
-			return nLocal;
+			int32 n = nInput;
+			n = ((n & 0xAAAA) >> 1) | ((n & 0x5555) << 1);
+			n = ((n & 0xCCCC) >> 2) | ((n & 0x3333) << 2);
+			n = ((n & 0xF0F0) >> 4) | ((n & 0x0F0F) << 4);
+			n = ((n & 0xFF00) >> 8) | ((n & 0x00FF) << 8);
+			return n;
 		}
 
 		public static uint8 stbi__blinn_8x8(uint8 x, uint8 y)
@@ -388,40 +388,40 @@ namespace StbImageBeef
 			return z;
 		}
 
-		public static int32 stbi__high_bit(uint32 z)
+		public static int32 stbi__high_bit(uint32 zInput)
 		{
-			uint32 zLocal = z;
+			uint32 z = zInput;
 			int32 n = 0;
-			if (zLocal == 0)
+			if (z == 0)
 				return -1;
-			if (zLocal >= 0x10000)
+			if (z >= 0x10000)
 			{
 				n += 16;
-				zLocal >>= 16;
+				z >>= 16;
 			}
 
-			if (zLocal >= 0x00100)
+			if (z >= 0x00100)
 			{
 				n += 8;
-				zLocal >>= 8;
+				z >>= 8;
 			}
 
-			if (zLocal >= 0x00010)
+			if (z >= 0x00010)
 			{
 				n += 4;
-				zLocal >>= 4;
+				z >>= 4;
 			}
 
-			if (zLocal >= 0x00004)
+			if (z >= 0x00004)
 			{
 				n += 2;
-				zLocal >>= 2;
+				z >>= 2;
 			}
 
-			if (zLocal >= 0x00002)
+			if (z >= 0x00002)
 			{
 				n += 1;
-				zLocal >>= 1;
+				z >>= 1;
 			}
 
 			return n;
@@ -628,15 +628,15 @@ namespace StbImageBeef
 			return c;
 		}
 
-		public static int32 stbi__shiftsigned(uint32 v, int32 shift, int32 bits)
+		public static int32 stbi__shiftsigned(uint32 vInput, int32 shift, int32 bits)
 		{
-			uint32 vLocal = v;
+			uint32 v = vInput;
 			if (shift < 0)
-				vLocal <<= -shift;
+				v <<= -shift;
 			else
-				vLocal >>= shift;
-			vLocal >>= 8 - bits;
-			return (int32)((int32)vLocal * (int32)stbi__shiftsigned_mul_table[bits]) >> (int32)stbi__shiftsigned_shift_table[bits];
+				v >>= shift;
+			v >>= 8 - bits;
+			return (int32)((int32)v * (int32)stbi__shiftsigned_mul_table[bits]) >> (int32)stbi__shiftsigned_shift_table[bits];
 		}
 
 		public static void stbi__unpremultiply_on_load_thread(int32 flag_true_if_should_unpremultiply)

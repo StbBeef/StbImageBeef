@@ -34,6 +34,15 @@ namespace StbImageBeef
 			get; set;
 		}
 
+		public this(uint8* result, int32 width, int32 height, ColorComponents comp, ColorComponents req_comp)
+		{
+			Width = width;
+			Height = height;
+			SourceComp = comp;
+			Comp = req_comp == ColorComponents.Default ? comp : req_comp;
+			Data = result;
+		}
+
 		public ~this()
 		{
 			if (Data != null)
@@ -43,38 +52,42 @@ namespace StbImageBeef
 			}
 		}
 
-		internal static ImageResult FromResult(uint8* result, int32 width, int32 height, ColorComponents comp, ColorComponents req_comp)
-		{
-			if (result == null)
-				return null;
-
-			var image = new ImageResult();
-			image.Width = width;
-			image.Height = height;
-			image.SourceComp = comp;
-			image.Comp = req_comp == ColorComponents.Default ? comp : req_comp;
-			image.Data = result;
-
-			return image;
-		}
-
-		public static ImageResult FromStream(Stream stream,
-			ColorComponents requiredComponents = ColorComponents.Default)
+		public static uint8* RawFromStream(Stream stream, ColorComponents requiredComponents, out int32 width, out int32 height, out ColorComponents sourceComp)
 		{
 			uint8* result = null;
 
-			int32 x = 0, y = 0, comp = 0;
+			width = height = 0;
+			sourceComp = ColorComponents.Default;
 
 			var context = scope stbi__context(stream);
 
-			result = stbi__load_and_postprocess_8bit(context, &x, &y, &comp, ((int32)requiredComponents));
+			int32 comp = 0;
+			result = stbi__load_and_postprocess_8bit(context, &width, &height, &comp, ((int32)requiredComponents));
 
-			return FromResult(result, x, y, (ColorComponents)comp, requiredComponents);
+			sourceComp = (ColorComponents)comp;
+
+			return result;
+		}
+
+		public static uint8* RawFromMemory(List<uint8> data, ColorComponents requiredComponents, out int32 width, out int32 height, out ColorComponents sourceComp)
+		{
+			var stream = scope MyMemoryStream(data);
+			return RawFromStream(stream, requiredComponents, out width, out height, out sourceComp);
+		}
+
+		public static ImageResult FromStream(Stream stream, ColorComponents requiredComponents = ColorComponents.Default)
+		{
+			int32 width, height;
+			ColorComponents sourceComp;
+
+			var result = RawFromStream(stream, requiredComponents, out width, out height, out sourceComp);
+
+			return new ImageResult(result, width, height, sourceComp, requiredComponents);
 		}
 
 		public static ImageResult FromMemory(List<uint8> data, ColorComponents requiredComponents = ColorComponents.Default)
 		{
-			var stream =  scope MemoryStream(data);
+			var stream = scope MyMemoryStream(data);
 			return FromStream(stream, requiredComponents);
 		}
 	}

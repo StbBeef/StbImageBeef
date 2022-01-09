@@ -24,7 +24,7 @@ There is special app to measure reliability & performance of StbImageBeef in com
 
 It goes through every image file in the specified folder and tries to load it 10 times with StbImageBeef, then 10 times with native wrapper over the original stb_image.h(Stb.Native). Then it compares whether the results are byte-wise similar and also calculates loading times. Also it sums up and reports loading times for each method.
 
-I've used it over following set of images: https://github.com/StbBeef/TestImages
+I've used it over following set of images: https://github.com/StbSharp/TestImages
 
 The byte-wise comprarison results are similar for StbImageBeef and Stb.Native.
 

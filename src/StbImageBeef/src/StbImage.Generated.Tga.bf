@@ -15,6 +15,7 @@ namespace StbImageBeef
 				case 8:
 					return STBI_grey;
 				case 16:
+					fallthrough;
 				case 15:
 					if (bits_per_pixel == 16 && is_grey != 0)
 						return STBI_grey_alpha;
@@ -22,6 +23,7 @@ namespace StbImageBeef
 						*is_rgb16 = 1;
 					return STBI_rgb;
 				case 24:
+					fallthrough;
 				case 32:
 					return bits_per_pixel / 8;
 			}

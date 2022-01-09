@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Collections;
+using Hebron.Runtime;
 using static StbImageBeef.StbImage;
 
 namespace StbImageBeef
@@ -32,6 +34,15 @@ namespace StbImageBeef
 			get; set;
 		}
 
+		public ~this()
+		{
+			if (Data != null)
+			{
+				CRuntime.free(Data);
+				Data = null;
+			}
+		}
+
 		internal static ImageResult FromResult(uint8* result, int32 width, int32 height, ColorComponents comp, ColorComponents req_comp)
 		{
 			if (result == null)
@@ -54,11 +65,17 @@ namespace StbImageBeef
 
 			int32 x = 0, y = 0, comp = 0;
 
-			var context = new stbi__context(stream);
+			var context = scope stbi__context(stream);
 
 			result = stbi__load_and_postprocess_8bit(context, &x, &y, &comp, ((int32)requiredComponents));
 
 			return FromResult(result, x, y, (ColorComponents)comp, requiredComponents);
+		}
+
+		public static ImageResult FromMemory(List<uint8> data, ColorComponents requiredComponents = ColorComponents.Default)
+		{
+			var stream =  scope MemoryStream(data);
+			return FromStream(stream, requiredComponents);
 		}
 	}
 }

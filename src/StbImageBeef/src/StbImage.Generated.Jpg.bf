@@ -53,11 +53,7 @@ namespace StbImageBeef
 				int32 j = 0;
 				uint8* output;
 				var coutput = scope uint8*[] { null, null, null, null };
-				var res_comp = new stbi__resample[4];
-				res_comp[0] = new stbi__resample();
-				res_comp[1] = new stbi__resample();
-				res_comp[2] = new stbi__resample();
-				res_comp[3] = new stbi__resample();
+				var res_comp = scope stbi__resample[4] { scope stbi__resample(), scope stbi__resample(), scope stbi__resample(), scope stbi__resample() };
 				for (k = 0; k < decode_n; ++k)
 				{
 					var r = res_comp[k];
@@ -106,8 +102,9 @@ namespace StbImageBeef
 						{
 							r.ystep = 0;
 							r.line0 = r.line1;
-							if (++r.ypos < z.img_comp[k].y)
+							if (++r.ypos < z.img_comp[k].y) {
 								r.line1 += z.img_comp[k].w2;
+							}
 						}
 					}
 
@@ -125,8 +122,9 @@ namespace StbImageBeef
 									_out_[3] = 255;
 									_out_ += n;
 								}
-							else
+							else {
 								z.YCbCr_to_RGB_kernel(_out_, y, coutput[1], coutput[2], (int32)z.s.img_x, n);
+							}
 						}
 						else if (z.s.img_n == 4)
 						{
@@ -951,7 +949,7 @@ namespace StbImageBeef
 		public static int32 stbi__jpeg_info(stbi__context s, int32* x, int32* y, int32* comp)
 		{
 			int32 result = 0;
-			var j = new stbi__jpeg();
+			var j = scope stbi__jpeg();
 			if (j == null)
 				return stbi__err("outofmem");
 			j.s = s;
@@ -980,7 +978,7 @@ namespace StbImageBeef
 			stbi__result_info* ri)
 		{
 			uint8* result;
-			var j = new stbi__jpeg();
+			var j = scope stbi__jpeg();
 			if (j == null)
 				return (uint8*)(stbi__err("outofmem") != 0 ? null : null);
 			j.s = s;
@@ -1003,7 +1001,7 @@ namespace StbImageBeef
 		public static int32 stbi__jpeg_test(stbi__context s)
 		{
 			int32 r = 0;
-			var j = new stbi__jpeg();
+			var j = scope stbi__jpeg();
 			if (j == null)
 				return stbi__err("outofmem");
 			j.s = s;
@@ -1296,9 +1294,10 @@ namespace StbImageBeef
 							return stbi__err("bad DQT type");
 						if (t > 3)
 							return stbi__err("bad DQT table");
-						for (i = 0; i < 64; ++i)
+						for (i = 0; i < 64; ++i) {
 							z.dequant[t][stbi__jpeg_dezigzag[i]] =
 								(uint16)(sixteen != 0 ? stbi__get16be(z.s) : stbi__get8(z.s));
+						}
 
 						L -= sixteen != 0 ? 129 : 65;
 					}
@@ -1589,11 +1588,11 @@ namespace StbImageBeef
 
 		public class stbi__jpeg
 		{
-			public readonly uint16[][] dequant;
+			public uint16[4][64] dequant;
 
-			public readonly int16[][] fast_ac;
-			public readonly stbi__huffman[4] huff_ac;
-			public readonly stbi__huffman[4] huff_dc;
+			public int16[4][1 << STBI__ZFAST_BITS] fast_ac;
+			public stbi__huffman[4] huff_ac;
+			public stbi__huffman[4] huff_dc;
 			public int32 app14_color_transform; // Adobe APP14 tag
 			public int32 code_bits; // number of valid bits
 
@@ -1613,7 +1612,7 @@ namespace StbImageBeef
 			public int32 jfif;
 			public uint8 marker; // marker seen while filling entropy buffer
 			public int32 nomore; // flag if we saw a marker so must stop
-			public int32[] order = new int32[4];
+			public int32[4] order;
 
 			public int32 progressive;
 			public function uint8* (uint8* a, uint8* b, uint8* c, int32 d, int32 e) resample_row_hv_2_kernel;
@@ -1633,14 +1632,6 @@ namespace StbImageBeef
 			public this()
 			{
 				img_comp[0].x = 0;
-
-				fast_ac = new int16[4][];
-				for (int32 i = 0; i < fast_ac.Count; ++i)
-					fast_ac[i] = new int16[1 << STBI__ZFAST_BITS];
-
-				dequant = new uint16[4][];
-				for (int32 i = 0; i < dequant.Count; ++i)
-					dequant[i] = new uint16[64];
 			}
 
 			public struct unnamed1

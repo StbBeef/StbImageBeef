@@ -2,7 +2,7 @@ using System.Threading;
 
 namespace Hebron.Runtime
 {
-	static class MemoryStats
+	public static class MemoryStats
 	{
 		private static int32 _allocations;
 		 

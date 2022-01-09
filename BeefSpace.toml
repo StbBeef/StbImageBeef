@@ -1,5 +1,5 @@
 FileVersion = 1
-Projects = {BeefTest2 = {Path = "tests/StbImageBeef.Testing"}, StbImageBeef = {Path = "src/StbImageBeef"}}
+Projects = {BeefTest2 = {Path = "samples/StbImageBeef.Testing"}, StbImageBeef = {Path = "src/StbImageBeef"}, "Stb.Native" = {Path = "samples/Stb.Native"}}
 
 [Workspace]
 StartupProject = "StbImageBeef.Testing"

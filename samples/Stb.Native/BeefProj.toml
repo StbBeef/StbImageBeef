@@ -1,0 +1,14 @@
+FileVersion = 1
+
+[Project]
+Name = "Stb.Native"
+TargetType = "BeefLib"
+StartupObject = "Stb.Native.Program"
+
+[Configs.Debug.Win64]
+OtherLinkFlags = "$(LinkFlags) gdi32.lib user32.lib kernel32.lib shell32.lib"
+LibPaths = ["$(ProjectDir)\\lib\\stb_image.lib"]
+
+[Configs.Release.Win64]
+OtherLinkFlags = "$(LinkFlags) gdi32.lib user32.lib kernel32.lib shell32.lib"
+LibPaths = ["$(ProjectDir)\\lib\\stb_image.lib"]

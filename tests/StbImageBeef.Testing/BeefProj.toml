@@ -1,6 +1,0 @@
-FileVersion = 1
-Dependencies = {"StbImageBeef" = "*"}
-
-[Project]
-Name = "StbImageBeef.Testing"
-StartupObject = "StbImageBeef.Program"

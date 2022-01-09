@@ -1,0 +1,240 @@
+FileVersion = 1
+LastConfig = "Debug"
+LastPlatform = "Win64"
+RecentFilesList = ["src\\StbImageBeef\\src\\ImageResult.bf", "samples\\StbImageBeef.Testing\\src\\Program.bf", "Disassembly", "src\\StbImageBeef\\src\\StbImage.Generated.Common.bf", "src\\StbImageBeef\\src\\Hebron.Runtime\\CRuntime.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Psd.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Tga.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Png.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Zlib.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Jpg.bf", "src\\StbImageBeef\\src\\Hebron.Runtime\\MemoryStats.bf", "src\\StbImageBeef\\src\\StbImage.Generated.Bmp.bf", "src\\StbImageBeef\\src\\StbImage.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Array.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\String.bf", "Disassembly", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\File.bf", "tests\\StbImageBeef.Testing\\src\\Program.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\IO\\FileStream.bf"]
+
+[MainWindow]
+X = 487
+Y = 105
+Width = 1586
+Height = 1190
+ShowKind = "Maximized"
+
+[MainDockingFrame]
+Type = "DockingFrame"
+SplitType = 2
+
+[[MainDockingFrame.DockedWidgets]]
+RequestedWidth = 350.0
+RequestedHeight = 200.0
+SizePriority = 200.0
+Type = "DockingFrame"
+SplitType = 1
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets]]
+RequestedWidth = 476.0
+RequestedHeight = 200.0
+Type = "TabbedView"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "Workspace"
+TabWidth = 115.0
+Type = "ProjectPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets]]
+IsFillWidget = true
+Permanent = true
+RequestedWidth = 150.0
+RequestedHeight = 150.0
+SizePriority = 150.0
+DefaultDocumentsTabbedView = true
+Type = "TabbedView"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "ImageResult.bf"
+TabWidth = 126.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\ImageResult.bf"
+CursorPos = 1521
+VertPos = 615.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Psd.bf"
+TabWidth = 198.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Psd.bf"
+CursorPos = 400
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "MemoryStats.bf"
+TabWidth = 132.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\Hebron.Runtime\\MemoryStats.bf"
+CursorPos = 379
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Common.bf"
+TabWidth = 230.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Common.bf"
+CursorPos = 6903
+VertPos = 2805.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Tga.bf"
+TabWidth = 198.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Tga.bf"
+CursorPos = 7457
+VertPos = 4110.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Bmp.bf"
+TabWidth = 203.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Bmp.bf"
+CursorPos = 17
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Zlib.bf"
+TabWidth = 198.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Zlib.bf"
+CursorPos = 17
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.bf"
+TabWidth = 110.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.bf"
+CursorPos = 599
+VertPos = 45.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Array.bf"
+TabWidth = 86.0
+Type = "SourceViewPanel"
+FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Array.bf"
+CursorPos = 6481
+VertPos = 3300.0
+ProjectName = "corlib"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Jpg.bf"
+TabWidth = 198.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Jpg.bf"
+CursorPos = 32071
+VertPos = 19695.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "StbImage.Generated.Png.bf"
+TabWidth = 199.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\StbImage.Generated.Png.bf"
+CursorPos = 21427
+VertPos = 11190.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "String.bf"
+TabWidth = 89.0
+Type = "SourceViewPanel"
+FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\String.bf"
+CursorPos = 21073
+VertPos = 12570.0
+ProjectName = "corlib"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "CRuntime.bf"
+TabWidth = 110.0
+Type = "SourceViewPanel"
+FilePath = "src\\StbImageBeef\\src\\Hebron.Runtime\\CRuntime.bf"
+CursorPos = 285
+VertPos = 45.0
+ProjectName = "StbImageBeef"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Disassembly"
+TabWidth = 112.0
+Type = "DisassemblyPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Program.bf"
+TabWidth = 96.0
+Type = "SourceViewPanel"
+FilePath = "samples\\StbImageBeef.Testing\\src\\Program.bf"
+CursorPos = 4056
+VertPos = 2205.0
+ProjectName = "StbImageBeef.Testing"
+
+[[MainDockingFrame.DockedWidgets]]
+RequestedWidth = 250.0
+RequestedHeight = 249.0
+Type = "DockingFrame"
+SplitType = 1
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets]]
+RequestedWidth = 250.0
+RequestedHeight = 250.0
+SizePriority = 2558.0
+Type = "TabbedView"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Memory"
+TabWidth = 99.0
+Type = "MemoryPanel"
+AutoResize = "Auto_Mul8"
+RequestedWidth = 300.0
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Watch"
+TabWidth = 86.0
+Type = "WatchPanel"
+Columns = [{Width = 200.0}, {Width = 200.0}, {Width = 200.0}]
+Items = ["orig[i]", "n", "0xffffffff / 2", "limit", "(int64)val", ""]
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "Auto"
+TabWidth = 77.0
+Type = "AutoWatchPanel"
+Columns = [{Width = 200.0}, {Width = 322.0}, {Width = 200.0}]
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets]]
+RequestedWidth = 250.0
+RequestedHeight = 250.0
+SizePriority = 2558.0
+Type = "TabbedView"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Find Results"
+TabWidth = 119.0
+Type = "FindResultsPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Threads"
+TabWidth = 97.0
+Type = "ThreadPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
+TabLabel = "Call Stack"
+TabWidth = 105.0
+Type = "CallStackPanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Immediate"
+TabWidth = 111.0
+Type = "ImmediatePanel"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Output"
+TabWidth = 90.0
+Type = "OutputPanel"
+
+[[Breakpoints]]
+File = "tests\\StbImageBeef.Testing\\src\\Program.bf"
+Line = 16
+Column = 3

@@ -371,7 +371,7 @@ namespace StbImageBeef
 		{
 			int8* q;
 			int32 cur = 0;
-			int32 limit = 0;
+			int64 limit = 0;
 			int32 old_limit = 0;
 			z.zout = zout;
 			if (z.z_expandable == 0)
@@ -382,7 +382,7 @@ namespace StbImageBeef
 				return stbi__err("outofmem");
 			while (cur + n > limit)
 			{
-				if (limit > 0xffffffff / 2)
+				if (limit > (0xffffffff / 2))
 					return stbi__err("outofmem");
 				limit *= 2;
 			}

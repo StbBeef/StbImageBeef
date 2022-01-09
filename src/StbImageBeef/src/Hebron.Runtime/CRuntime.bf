@@ -4,6 +4,9 @@ namespace Hebron.Runtime
 {
 	static class CRuntime
 	{
+		[LinkName("realloc")]
+		public static extern void* StdRealloc(void *ptr, int size);
+
 		public static void* malloc(uint64 size)
 		{
 			return malloc((int64)size);
@@ -78,10 +81,7 @@ namespace Hebron.Runtime
 			if (a == null)
 				return malloc(newSize);
 
-			var newPtr = malloc(newSize);
-			memcpy(newPtr, a, newSize);
-
-			free(a);
+			var newPtr = StdRealloc(a, newSize);
 
 			return newPtr;
 		}

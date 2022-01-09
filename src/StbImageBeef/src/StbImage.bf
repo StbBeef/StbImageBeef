@@ -42,7 +42,7 @@ namespace StbImageBeef
 
 		public static void stbi__skip(stbi__context s, int32 skip)
 		{
-			s.Stream.Seek(skip, .Relative);
+			s.Stream.Seek(s.Stream.Position + skip, .Absolute);
 		}
 
 		public static void stbi__rewind(stbi__context s)

@@ -377,8 +377,8 @@ namespace StbImageBeef
 
 		public static uint32 stbi__get32be(stbi__context s)
 		{
-			var z = (uint16)stbi__get8(s);
-			return z + ((uint16)stbi__get8(s) << 8);
+			var z = (uint32)stbi__get16be(s);
+			return (uint32)((z << 16) + (uint32)stbi__get16be(s));
 		}
 
 		public static uint32 stbi__get32le(stbi__context s)

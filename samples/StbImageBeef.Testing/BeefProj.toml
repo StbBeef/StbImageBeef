@@ -1,0 +1,9 @@
+FileVersion = 1
+Dependencies = {StbImageBeef = "*", "Stb.Native" = "*"}
+
+[Project]
+Name = "StbImageBeef.Testing"
+StartupObject = "StbImageBeef.Testing.Program"
+
+[Configs.Debug.Win64]
+DebugCommandArguments = "D:\\Projects\\Hebron\\TestImages"

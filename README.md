@@ -1,9 +1,9 @@
 # StbImageBeef
 [![Chat](https://img.shields.io/discord/628186029488340992.svg)](https://discord.gg/ZeHxhCY)
 
-StbImageBeef is Beef port of the stb_image.h, which is C library to load images in JPG, PNG, BMP, TGA, PSD, GIF and HDR formats.
+StbImageBeef is Beef port of the stb_image.h, which is C library to load images in JPG, PNG, BMP, TGA, PSD and GIF formats.
 
-It is important to note, that this project is **port**(not **wrapper**). Original C code had been ported to Beef. Therefore StbImageBeef doesnt require any native binaries.
+It is important to note, that this project is **port**(not **wrapper**). Entire C code had been ported to Beef.
 
 # Usage
 ```c#

@@ -43,7 +43,7 @@ namespace Hebron.Runtime
 
 		public static int32 memcmp(void* a, void* b, int64 size)
 		{
-			return (int32)Internal.MemCmp(a, b, size);
+			return (int32)Internal.MemCmp(a, b, (int)size);
 		}
 
 		public static int32 memcmp(void* a, void* b, uint64 size)
@@ -81,7 +81,7 @@ namespace Hebron.Runtime
 			if (a == null)
 				return malloc(newSize);
 
-			var newPtr = StdRealloc(a, newSize);
+			var newPtr = StdRealloc(a, (int)newSize);
 
 			return newPtr;
 		}

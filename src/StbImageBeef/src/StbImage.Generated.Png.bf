@@ -708,10 +708,10 @@ namespace StbImageBeef
 								return stbi__err("invalid PLTE");
 							for (i = 0; i < pal_len; ++i)
 							{
-								palette[i * 4 + 0] = stbi__get8(s);
-								palette[i * 4 + 1] = stbi__get8(s);
-								palette[i * 4 + 2] = stbi__get8(s);
-								palette[i * 4 + 3] = 255;
+								palette[(.)i * 4 + 0] = stbi__get8(s);
+								palette[(.)i * 4 + 1] = stbi__get8(s);
+								palette[(.)i * 4 + 2] = stbi__get8(s);
+								palette[(.)i * 4 + 3] = 255;
 							}
 
 							break;
@@ -736,7 +736,7 @@ namespace StbImageBeef
 								if (c.length > pal_len)
 									return stbi__err("bad tRNS len");
 								pal_img_n = 4;
-								for (i = 0; i < c.length; ++i) palette[i * 4 + 3] = stbi__get8(s);
+								for (i = 0; i < c.length; ++i) palette[(.)i * 4 + 3] = stbi__get8(s);
 							}
 							else
 							{

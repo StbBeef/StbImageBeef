@@ -940,7 +940,7 @@ namespace StbImageBeef
 
 			if (k > j.code_bits)
 				return -1;
-			c = (int32)(((j.code_buffer >> (32 - k)) & stbi__bmask[k]) + (uint32)h.delta[k]);
+			c = (int32)(((j.code_buffer >> (32 - k)) & stbi__bmask[k]) &+ (uint32)h.delta[k]);
 			j.code_bits -= k;
 			j.code_buffer <<= k;
 			return h.values[c];

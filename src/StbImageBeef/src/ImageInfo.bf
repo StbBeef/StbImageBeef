@@ -18,7 +18,7 @@ namespace StbImageBeef
 		public static ImageInfo? FromStream(Stream stream)
 		{
 			int32 width = 0, height = 0, comp = 0;
-			var context = new StbImage.stbi__context(stream);
+			var context = scope StbImage.stbi__context(stream);
 
 			var is16Bit = StbImage.stbi__is_16_main(context) == 1;
 			StbImage.stbi__rewind(context);

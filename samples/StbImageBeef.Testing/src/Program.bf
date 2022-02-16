@@ -65,34 +65,32 @@ namespace StbImageBeef.Testing
 
 		private class LoadingTimes
 		{
-			private readonly Dictionary<String, int> _byExtension = new Dictionary<String, int>();
-			private readonly Dictionary<String, int> _byExtensionCount = new Dictionary<String, int>();
+			private readonly Monitor Monitor = new Monitor() ~ delete _;
+			private readonly Dictionary<String, int> _byExtension = new Dictionary<String, int>() ~ DeleteDictionaryAndKeys!(_);
+			private readonly Dictionary<String, int> _byExtensionCount = new Dictionary<String, int>() ~ DeleteDictionaryAndKeys!(_);
 			private int _total, _totalCount;
 
 			public void Add(String ext, int value)
 			{
-				var key = new String(ext);
-
-				String matchKey;
-				int matchValue;
-				if (!_byExtension.TryGet(key, out matchKey, out matchValue)) {
-					_byExtension[key] = 0;
-					_byExtensionCount[key] = 0;
-				} else {
-					delete key;
-					key = matchKey;
+				using (Monitor.Enter())
+				{
+					if (_byExtension.TryAdd(ext, let matchKey, let matchValue)) {
+						*matchKey = new String(ext);
+						*matchValue = 0;
+						_byExtensionCount[new String(ext)] = 0;
+					}
+	
+					_byExtension[ext] += value;
+					++_byExtensionCount[ext];
+					_total += value;
+					++_totalCount;
 				}
-
-				_byExtension[key] += value;
-				++_byExtensionCount[key];
-				_total += value;
-				++_totalCount;
 			}
 
 			public void BuildString(String sb)
 			{
 				sb.Clear();
-				foreach (var pair in _byExtension)
+				for (var pair in _byExtension)
 				{
 					var key = pair.key;
 					var value = pair.value;
@@ -106,7 +104,7 @@ namespace StbImageBeef.Testing
 			{
 				sb.Clear();
 
-				foreach (var pair in _byExtensionCount)
+				for (var pair in _byExtensionCount)
 				{
 					sb.AppendF($"{pair.key}: {pair.value}, ");
 				}
@@ -118,8 +116,8 @@ namespace StbImageBeef.Testing
 		private const int LoadTries = 10;
 		private static int tasksStarted;
 		private static int filesProcessed, filesMatches;
-		private static LoadingTimes stbImageSharpTotal = new LoadingTimes();
-		private static LoadingTimes stbNativeTotal = new LoadingTimes();
+		private static LoadingTimes stbImageSharpTotal = new LoadingTimes() ~ delete _;
+		private static LoadingTimes stbNativeTotal = new LoadingTimes() ~ delete _;
 
 		public static void Log(StringView fmt, params Object[] args)
 		{
@@ -170,16 +168,12 @@ namespace StbImageBeef.Testing
 		{
 			var files = Directory.EnumerateFiles(imagesPath, "*.*");
 
-			var threads = new List<Thread>();
-			foreach (var file in files)
+			for (var file in files)
 			{
 				var path = new String();
 				file.GetFilePath(path);
 
-				Thread thread = new .(new => ThreadProc);
-				threads.Add(thread);
-				thread.Start(path, false);
-
+				ThreadPool.QueueUserWorkItem(new () => { ThreadProc(path); } ~ delete path);
 				Interlocked.Increment(ref tasksStarted);
 			}
 
@@ -191,17 +185,11 @@ namespace StbImageBeef.Testing
 					break;
 			}
 
-			foreach(var thread in threads)
-			{
-				delete thread;
-			}
-
 			return true;
 		}
 
-		private static void ThreadProc(Object obj)
+		private static void ThreadProc(String f)
 		{
-			String f = (String)obj;
 			if (!f.EndsWith(".bmp") && !f.EndsWith(".jpg") && !f.EndsWith(".png") &&
 				!f.EndsWith(".jpg") && !f.EndsWith(".psd") && !f.EndsWith(".pic") &&
 				!f.EndsWith(".tga") && !f.EndsWith(".hdr"))
@@ -216,14 +204,14 @@ namespace StbImageBeef.Testing
 			StbImageBeefResult stbImageBeefResult = null;
 			StbNativeResult stbNativeResult = null;
 
-			repeat {
+			do {
 				Log(String.Empty);
 				var dt = scope String();
 				DateTime.Now.ToLongTimeString(dt);
 				Log($"{dt}: Loading {f} into memory");
 
 				var dataList = scope List<uint8>();
-				var result = File.ReadAll(f, dataList);
+				File.ReadAll(f, dataList);
 
 				var ext = scope String();
 				Path.GetExtension(f, ext);
@@ -268,7 +256,7 @@ namespace StbImageBeef.Testing
 
 				stbImageSharpTotal.Add(ext, stbImageBeefResult.TimeInMs);
 				stbNativeTotal.Add(ext, stbNativeResult.TimeInMs);
-			} while(false);
+			}
 
 			if (stbImageBeefResult != null) {
 				delete stbImageBeefResult;
@@ -284,8 +272,6 @@ namespace StbImageBeef.Testing
 			} else {
 				Log($"Error: {err}");
 			}
-
-			delete f;
 
 			Interlocked.Increment(ref filesProcessed);
 			Interlocked.Decrement(ref tasksStarted);

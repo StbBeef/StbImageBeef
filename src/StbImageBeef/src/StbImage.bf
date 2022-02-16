@@ -11,7 +11,7 @@ namespace StbImageBeef
 	static class StbImage
 	{
 		public static String stbi__g_failure_reason;
-		public static readonly char8[] stbi__parse_png_file_invalid_chunk = new char8[25];
+		public static readonly char8[] stbi__parse_png_file_invalid_chunk = new char8[25] ~ delete _;
 
 		public class stbi__context
 		{
@@ -35,21 +35,25 @@ namespace StbImageBeef
 			return 0;
 		}
 
+		[Inline]
 		public static uint8 stbi__get8(stbi__context s)
 		{
 			return s.Stream.Read<uint8>();
 		}
 
+		[Inline]
 		public static void stbi__skip(stbi__context s, int32 skip)
 		{
 			s.Stream.Seek(s.Stream.Position + skip, .Absolute);
 		}
 
+		[Inline]
 		public static void stbi__rewind(stbi__context s)
 		{
 			s.Stream.Seek(0, .Absolute);
 		}
 
+		[Inline]
 		public static int32 stbi__at_eof(stbi__context s)
 		{
 			return s.Stream.Position == s.Stream.Length ? 1 : 0;

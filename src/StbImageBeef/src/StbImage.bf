@@ -61,19 +61,7 @@ namespace StbImageBeef
 
 		public static int32 stbi__getn(stbi__context s, uint8* buf, int32 size)
 		{
-			int32 i = 0;
-			for(; i < size; ++i)
-			{
-				if (stbi__at_eof(s) == 1)
-				{
-					break;
-				}
-
-				buf[i] = stbi__get8(s);
-
-			}
-
-			return i;
+			return (s.Stream.TryRead(.(buf, size)) case .Ok(let read) && read == size) ? 1 : 0;
 		}
 	}
 }

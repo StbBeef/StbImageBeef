@@ -44,7 +44,7 @@ namespace StbImageBeef
 			uint32 all_a = 0;
 
 			// TODO
-			var pal = scope uint8[256][4];
+			uint8[256][4] pal = ?;
 			int32 psize = 0;
 			int32 i = 0;
 			int32 j = 0;

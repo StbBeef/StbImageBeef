@@ -93,38 +93,10 @@ namespace StbImageBeef
 			final = (uint8*)stbi__malloc_mad3((int32)a.s.img_x, (int32)a.s.img_y, out_uint8s, 0);
 			for (p = 0; p < 7; ++p)
 			{
-				var xorig = scope int32[7];
-				xorig[0] = 0;
-				xorig[1] = 4;
-				xorig[2] = 0;
-				xorig[3] = 2;
-				xorig[4] = 0;
-				xorig[5] = 1;
-				xorig[6] = 0;
-				var yorig = scope int32[7];
-				yorig[0] = 0;
-				yorig[1] = 0;
-				yorig[2] = 4;
-				yorig[3] = 0;
-				yorig[4] = 2;
-				yorig[5] = 0;
-				yorig[6] = 1;
-				var xspc = scope int32[7];
-				xspc[0] = 8;
-				xspc[1] = 8;
-				xspc[2] = 4;
-				xspc[3] = 4;
-				xspc[4] = 2;
-				xspc[5] = 2;
-				xspc[6] = 1;
-				var yspc = scope int32[7];
-				yspc[0] = 8;
-				yspc[1] = 8;
-				yspc[2] = 8;
-				yspc[3] = 4;
-				yspc[4] = 4;
-				yspc[5] = 2;
-				yspc[6] = 2;
+				int32[?] xorig = .( 0, 4, 0, 2, 0, 1, 0 );
+				int32[?] yorig = .( 0, 0, 4, 0, 2, 0, 1 );
+				int32[?] xspc = .( 8, 8, 4, 4, 2, 2, 1 );
+				int32[?] yspc = .( 8, 8, 8, 4, 4, 2, 2 );
 				int32 i = 0;
 				int32 j = 0;
 				int32 x = 0;
@@ -610,16 +582,16 @@ namespace StbImageBeef
 
 		public static int32 stbi__parse_png_file(stbi__png z, int32 scan, int32 req_comp)
 		{
-			var palette = scope uint8[1024];
+			uint8[1024] palette = ?;
 			uint8 pal_img_n = 0;
 			uint8 has_trans = 0;
-			var tc = scope uint8[] { 0, 0, 0 };
-			var tc16 = scope uint16[3];
+			uint8[3] tc = .( 0, 0, 0 );
+			uint16[3] tc16 = ?;
 			uint32 ioff = 0;
 			uint32 idata_limit = 0;
 			uint32 i = 0;
 			uint32 pal_len = 0;
-			var first = 1;
+			int32 first = 1;
 			int32 k = 0;
 			int32 int32erlace = 0;
 			int32 color = 0;
@@ -708,10 +680,10 @@ namespace StbImageBeef
 								return stbi__err("invalid PLTE");
 							for (i = 0; i < pal_len; ++i)
 							{
-								palette[(.)i * 4 + 0] = stbi__get8(s);
-								palette[(.)i * 4 + 1] = stbi__get8(s);
-								palette[(.)i * 4 + 2] = stbi__get8(s);
-								palette[(.)i * 4 + 3] = 255;
+								palette[(.)(i * 4 + 0)] = stbi__get8(s);
+								palette[(.)(i * 4 + 1)] = stbi__get8(s);
+								palette[(.)(i * 4 + 2)] = stbi__get8(s);
+								palette[(.)(i * 4 + 3)] = 255;
 							}
 
 							break;
@@ -736,7 +708,7 @@ namespace StbImageBeef
 								if (c.length > pal_len)
 									return stbi__err("bad tRNS len");
 								pal_img_n = 4;
-								for (i = 0; i < c.length; ++i) palette[(.)i * 4 + 3] = stbi__get8(s);
+								for (i = 0; i < c.length; ++i) palette[(.)(i * 4 + 3)] = stbi__get8(s);
 							}
 							else
 							{
@@ -772,7 +744,6 @@ namespace StbImageBeef
 								return 0;
 							if (ioff + c.length > idata_limit)
 							{
-								var idata_limit_old = idata_limit;
 								uint8* p;
 								if (idata_limit == 0)
 									idata_limit = c.length > 4096 ? c.length : 4096;

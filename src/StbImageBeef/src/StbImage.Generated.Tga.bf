@@ -150,7 +150,7 @@ namespace StbImageBeef
 			uint8* tga_palette = null;
 			int32 i = 0;
 			int32 j = 0;
-			var raw_data = scope uint8[] { 0, 0, 0, 0 };
+			uint8[4] raw_data = .( 0, 0, 0, 0 );
 			int32 RLE_count = 0;
 			int32 RLE_repeating = 0;
 			var read_next_pixel = 1;

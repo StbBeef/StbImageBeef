@@ -43,7 +43,7 @@ namespace StbImageBeef
 
 		public static int32 stbi__gif_info_raw(stbi__context s, int32* x, int32* y, int32* comp)
 		{
-			var g = new stbi__gif();
+			var g = scope stbi__gif();
 			if (g == null)
 				return stbi__err("outofmem");
 			if (stbi__gif_header(s, g, comp, 1) == 0)
@@ -63,7 +63,7 @@ namespace StbImageBeef
 			stbi__result_info* ri)
 		{
 			uint8* u = null;
-			var g = new stbi__gif();
+			var g = scope stbi__gif();
 			u = stbi__gif_load_next(s, g, comp, req_comp, null);
 
 			if (u != null)
@@ -284,7 +284,7 @@ namespace StbImageBeef
 				uint8* u = null;
 				uint8* _out_ = null;
 				uint8* two_back = null;
-				var g = new stbi__gif();
+				var g = scope stbi__gif();
 				int32 stride = 0;
 				int32 out_size = 0;
 				int32 delays_size = 0;

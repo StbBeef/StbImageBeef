@@ -76,7 +76,7 @@ namespace StbImageBeef
 
 		public static uint8 stbi__blinn_8x8(uint8 x, uint8 y)
 		{
-			var t = (uint32)(x * y + 128);
+			var t = (uint32)((int32)x * (int32)y + 128);
 			return (uint8)((t + (t >> 8)) >> 8);
 		}
 

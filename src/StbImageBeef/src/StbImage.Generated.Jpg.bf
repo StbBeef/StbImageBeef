@@ -3,6 +3,9 @@
 using System;
 using Hebron.Runtime;
 
+// TODO: No code for SIMD is implemented yet.
+#define STBI_NO_SIMD
+
 namespace StbImageBeef
 {
 	extension StbImage
@@ -482,7 +485,7 @@ namespace StbImageBeef
 
 		public static void stbi__idct_block(uint8* _out_, int32 out_stride, int16* data)
 		{
-			int32 i = 0;
+			int32 i;
 			int32[64] val = ?;
 			var v = &val[0];
 			uint8* o;
@@ -490,24 +493,12 @@ namespace StbImageBeef
 			for (i = 0; i < 8; ++i, ++d, ++v)
 				if (d[8] == 0 && d[16] == 0 && d[24] == 0 && d[32] == 0 && d[40] == 0 && d[48] == 0 && d[56] == 0)
 				{
-					var dcterm = d[0] * 4;
-					v[0] = (int32)(v[8] = v[16] = v[24] = v[32] = v[40] = v[48] = v[56] = dcterm);
+					var dcterm = (int32)d[0] * 4;
+					v[0] = v[8] = v[16] = v[24] = v[32] = v[40] = v[48] = v[56] = dcterm;
 				}
 				else
 				{
-					int32 t0 = 0;
-					int32 t1 = 0;
-					int32 t2 = 0;
-					int32 t3 = 0;
-					int32 p1 = 0;
-					int32 p2 = 0;
-					int32 p3 = 0;
-					int32 p4 = 0;
-					int32 p5 = 0;
-					int32 x0 = 0;
-					int32 x1 = 0;
-					int32 x2 = 0;
-					int32 x3 = 0;
+					int32 t0, t1, t2, t3, p1, p2, p3, p4, p5, x0, x1, x2, x3;
 					p2 = d[16];
 					p3 = d[48];
 					p1 = (p2 + p3) * (int32)(0.5411961f * 4096 + 0.5);
@@ -558,19 +549,7 @@ namespace StbImageBeef
 
 			for (i = 0, v = &val[0], o = _out_; i < 8; ++i, v += 8, o += out_stride)
 			{
-				int32 t0 = 0;
-				int32 t1 = 0;
-				int32 t2 = 0;
-				int32 t3 = 0;
-				int32 p1 = 0;
-				int32 p2 = 0;
-				int32 p3 = 0;
-				int32 p4 = 0;
-				int32 p5 = 0;
-				int32 x0 = 0;
-				int32 x1 = 0;
-				int32 x2 = 0;
-				int32 x3 = 0;
+				int32 t0, t1, t2, t3, p1, p2, p3, p4, p5, x0, x1, x2, x3;
 				p2 = v[2];
 				p3 = v[6];
 				p1 = (p2 + p3) * (int32)(0.5411961f * 4096 + 0.5);
@@ -944,7 +923,7 @@ namespace StbImageBeef
 
 			if (k > j.code_bits)
 				return -1;
-			c = (int32)(((j.code_buffer >> (32 - k)) & stbi__bmask[k]) &+ (uint32)h.delta[k]);
+			c = (int32)((uint32)((j.code_buffer >> (32 - k)) & stbi__bmask[k]) + (uint32)h.delta[k]);
 			j.code_bits -= k;
 			j.code_buffer <<= k;
 			return h.values[c];
@@ -1022,9 +1001,12 @@ namespace StbImageBeef
 			{
 				if (z.scan_n == 1)
 				{
-					int32 i = 0;
-					int32 j = 0;
+					int32 i, j;
+#if !STBI_NO_SIMD
 					var data = scope [Align(16)] int16[64];
+#else
+					var data = scope int16[64];
+#endif
 					var n = z.order[0];
 					var w = (z.img_comp[n].x + 7) >> 3;
 					var h = (z.img_comp[n].y + 7) >> 3;
@@ -1051,12 +1033,12 @@ namespace StbImageBeef
 				}
 				else
 				{
-					int32 i = 0;
-					int32 j = 0;
-					int32 k = 0;
-					int32 x = 0;
-					int32 y = 0;
+					int32 i, j, k, x, y;
+#if !STBI_NO_SIMD
 					var data = scope [Align(16)] int16[64];
+#else
+					var data = scope int16[64];
+#endif
 					for (j = 0; j < z.img_mcu_y; ++j)
 						for (i = 0; i < z.img_mcu_x; ++i)
 						{
@@ -1093,8 +1075,7 @@ namespace StbImageBeef
 
 			if (z.scan_n == 1)
 			{
-				int32 i = 0;
-				int32 j = 0;
+				int32 i, j;
 				var n = z.order[0];
 				var w = (z.img_comp[n].x + 7) >> 3;
 				var h = (z.img_comp[n].y + 7) >> 3;
@@ -1128,11 +1109,7 @@ namespace StbImageBeef
 			}
 			else
 			{
-				int32 i = 0;
-				int32 j = 0;
-				int32 k = 0;
-				int32 x = 0;
-				int32 y = 0;
+				int32 i, j, k, x, y;
 				for (j = 0; j < z.img_mcu_y; ++j)
 					for (i = 0; i < z.img_mcu_x; ++i)
 					{
@@ -1476,15 +1453,15 @@ namespace StbImageBeef
 			}
 
 			_out_[0] = input[0];
-			_out_[1] = (uint8)((input[0] &* 3 &+ input[1] &+ 2) >> 2);
+			_out_[1] = (uint8)(((int32)input[0] * 3 + (int32)input[1] + 2) >> 2);
 			for (i = 1; i < w - 1; ++i)
 			{
-				var n = 3 &* input[i] &+ 2;
-				_out_[i * 2 + 0] = (uint8)((n &+ input[i - 1]) >> 2);
-				_out_[i * 2 + 1] = (uint8)((n &+ input[i + 1]) >> 2);
+				var n = 3 * (int32)input[i] + 2;
+				_out_[i * 2 + 0] = (uint8)((n + input[i - 1]) >> 2);
+				_out_[i * 2 + 1] = (uint8)((n + input[i + 1]) >> 2);
 			}
 
-			_out_[i * 2 + 0] = (uint8)((input[w - 2] &* 3 &+ input[w - 1] &+ 2) >> 2);
+			_out_[i * 2 + 0] = (uint8)(((int32)input[w - 2] * 3 + (int32)input[w - 1] + 2) >> 2);
 			_out_[i * 2 + 1] = input[w - 1];
 			return _out_;
 		}
@@ -1527,6 +1504,9 @@ namespace StbImageBeef
 			j.idct_block_kernel = => stbi__idct_block;
 			j.YCbCr_to_RGB_kernel = => stbi__YCbCr_to_RGB_row;
 			j.resample_row_hv_2_kernel = => stbi__resample_row_hv_2;
+
+			// TODO: optimize YCbCr with intrinsics
+			// TODO: optimize IdctBlock with intrinsics
 		}
 
 		public static void stbi__YCbCr_to_RGB_row(uint8* outInput, uint8* y, uint8* pcb, uint8* pcr, int32 count, int32 step)

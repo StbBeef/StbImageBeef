@@ -32,7 +32,7 @@ namespace StbImageBeef
 			if (is_info != 0)
 				return 1;
 			if ((g.flags & 0x80) != 0)
-				stbi__gif_parse_colortable(s, g.pal, 2 << (g.flags & 7), -1);
+				stbi__gif_parse_colortable(s, ref g.pal, 2 << (g.flags & 7), -1);
 			return 1;
 		}
 
@@ -171,13 +171,13 @@ namespace StbImageBeef
 
 							if ((g.lflags & 0x80) != 0)
 							{
-								stbi__gif_parse_colortable(s, g.lpal, 2 << (g.lflags & 7),
+								stbi__gif_parse_colortable(s, ref g.lpal, 2 << (g.lflags & 7),
 									(g.eflags & 0x01) != 0 ? g.transparent : -1);
-								g.color_table = (uint8*)g.lpal;
+								g.color_table = (uint8*)&g.lpal;
 							}
 							else if ((g.flags & 0x80) != 0)
 							{
-								g.color_table = (uint8*)g.pal;
+								g.color_table = (uint8*)&g.pal;
 							}
 							else
 							{
@@ -243,7 +243,7 @@ namespace StbImageBeef
 			}
 		}
 
-		public static void stbi__gif_parse_colortable(stbi__context s, uint8** pal, int32 num_entries, int32 transp)
+		public static void stbi__gif_parse_colortable(stbi__context s, ref uint8[256][4] pal, int32 num_entries, int32 transp)
 		{
 			int32 i = 0;
 			for (i = 0; i < num_entries; ++i)
@@ -441,7 +441,7 @@ namespace StbImageBeef
 					}
 
 					--len;
-					bits |= stbi__get8(s) << valid_bits;
+					bits |= (int32)stbi__get8(s) << valid_bits;
 					valid_bits += 8;
 				}
 				else
@@ -503,7 +503,7 @@ namespace StbImageBeef
 			public uint8* _out_;
 			public uint8* background;
 			public int32 bgindex;
-			public stbi__gif_lzw* codes = (stbi__gif_lzw*)stbi__malloc(8192 * sizeof(stbi__gif_lzw));
+			public stbi__gif_lzw[8192] codes;
 			public uint8* color_table;
 			public int32 cur_x;
 			public int32 cur_y;
@@ -514,10 +514,10 @@ namespace StbImageBeef
 			public uint8* history;
 			public int32 lflags;
 			public int32 line_size;
-			public uint8** lpal= (uint8**)stbi__malloc(256 * 4 * sizeof(uint8));
+			public uint8[256][4] lpal;
 			public int32 max_x;
 			public int32 max_y;
-			public uint8** pal = (uint8**)stbi__malloc(256 * 4 * sizeof(uint8));
+			public uint8[256][4] pal;
 			public int32 parse;
 			public int32 ratio;
 			public int32 start_x;
@@ -527,6 +527,7 @@ namespace StbImageBeef
 			public int32 w;
 		}
 
+		[System.CRepr]
 		public struct stbi__gif_lzw
 		{
 			public int16 prefix;
